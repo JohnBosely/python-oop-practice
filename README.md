@@ -92,3 +92,39 @@ I got it from "PYTHON 3 OBJECT ORIENTED PROGRAMMING 2ND EDITION BY DUSTY PHILLIP
 6. REFINE THE MODEL (VERY IMPORTANT)
 
 THIS IS BASICALLY ALL YOU NEED TO BE HONEST.
+
+
+ABSTRACTION AND POLYMORPHISM
+Just learnt abstraction, its the hiding of complexity. This concept was really vague cos i was wondering why there would be methods(abstract methods) that didnt have built in functions, then this led to polymorphism which means "many forms". 
+Abstraction involves using the:
+from abc import ABC, abstractmethod
+
+We imported this because python doesnt necessarily support abstraction so the ABC(abstract base classes) was created.
+
+STRUGGLES
+With Abstraction:
+"Why abstract when I can just write normal classes?" i asked myself this question a lot.
+
+Struggle to see practical benefits initially
+
+Solution: Work on larger projects where abstraction prevents code duplication
+
+Abstract vs Concrete class confusion
+
+When to make a class abstract vs regular
+
+Remember: Abstract classes = templates, Concrete = usable objects (learn this from a friend)
+
+Python's flexibility backfires
+
+No strict enforcement like Java/C#
+
+Easy to bypass abstraction, leading to poorly structured code
+
+With Polymorphism:
+Recognizing when to create polymorphic structures vs simple conditionals(definitely my biggest issue)
+
+TIPS THAT HELPED ME
+1. Build small projects, like the shape project, then increase the difficulty.
+2. Watch BroCode (he's so good)
+3. Write down the algorith before coding, this helped me alot honestly. I had a lot of "aha" moments while doing this
