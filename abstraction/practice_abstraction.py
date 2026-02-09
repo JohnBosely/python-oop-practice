@@ -1,95 +1,84 @@
-# # from abc import ABC, abstractmethod
+#Abstraction is the hiding of complexity, it only shows the users what is needed.
+#There are some methods you need and if you dont use abstraction you could foget them and have to write them every single time(if you use inheritance)
+#e.g. a remote hides the complexity of turning on or off a TV, but every remote must know how to do this functions, so you make the on or off methods abstract ones so you can use them anywhere, its that simple to be honest.
 
-# # class Shape(ABC):
-# #     @abstractmethod
-# #     def area(self):
-# #         pass
+#PRACTICE QUESTIONS
+from abc import ABC, abstractmethod
 
-# #     @abstractmethod
-# #     def perimeter(self):
-# #         pass
+class Vehicle(ABC):
+    def __init__(self, brand, model):
+        self.brand = brand
+        self.model = model
 
-# #Abstraction is the hiding of complexity, it only shows the users what is needed.
-# #There are some methods you need and if you dont use abstraction you could foget them and have to write them every single time(if you use inheritance)
-# #e.g. a remote hides the complexity of turning on or off a TV, but every remote must know how to do this functions, so you make the on or off methods abstract ones so you can use them anywhere, its that simple to be honest.
+    @abstractmethod
+    def start_engine(self):
+        pass
 
-# #PRACTICE QUESTIONS
-# from abc import ABC, abstractmethod
+    @abstractmethod
+    def stop_engine(self):
+        pass
 
-# class Vehicle(ABC):
-#     def __init__(self, brand, model):
-#         self.brand = brand
-#         self.model = model
+    @abstractmethod
+    def get_fuel_type(self):
+        pass
 
-#     @abstractmethod
-#     def start_engine(self):
-#         pass
+    def honk(self):
+        return (f'Beep Beep')
 
-#     @abstractmethod
-#     def stop_engine(self):
-#         pass
+class ElectricCar(Vehicle):
+    def __init__(self, brand, model):
+        super().__init__(brand, model)
 
-#     @abstractmethod
-#     def get_fuel_type(self):
-#         pass
-
-#     def honk(self):
-#         return (f'Beep Beep')
-
-# class ElectricCar(Vehicle):
-#     def __init__(self, brand, model):
-#         super().__init__(brand, model)
-
-#     def start_engine(self):
-#         return (f'Electric motor started silent')
+    def start_engine(self):
+        return (f'Electric motor started silent')
 
 
-#     def stop_engine(self):
-#         return (f'Electric motor stopped silent')
+    def stop_engine(self):
+        return (f'Electric motor stopped silent')
 
-#     def get_fuel_type(self):
-#         return (f'Electric')
+    def get_fuel_type(self):
+        return (f'Electric')
         
 
-# class GasCar(Vehicle):
-#     def __init__(self, brand, model):
-#         super().__init__(brand, model)
+class GasCar(Vehicle):
+    def __init__(self, brand, model):
+        super().__init__(brand, model)
 
-#     def start_engine(self):
-#         return (f'Vroom! Engine started')
+    def start_engine(self):
+        return (f'Vroom! Engine started')
 
-#     def stop_engine(self):
-#         return (f'Engine stopped')
+    def stop_engine(self):
+        return (f'Engine stopped')
 
 
-#     def get_fuel_type(self):
-#         return (f'Gasoline')
+    def get_fuel_type(self):
+        return (f'Gasoline')
         
 
-# class HybridCar(Vehicle):
-#     def __init__(self, brand, model):
-#        super().__init__(brand, model)
+class HybridCar(Vehicle):
+    def __init__(self, brand, model):
+       super().__init__(brand, model)
 
-#     def start_engine(self):
-#         pass #no need to write anything, just practicing
+    def start_engine(self):
+        pass #no need to write anything, just practicing
 
-#     def stop_engine(self):
-#         pass
+    def stop_engine(self):
+        pass
 
-#     def get_fuel_type(self):
-#         return (f'Hybrid')
+    def get_fuel_type(self):
+        return (f'Hybrid')
 
 
-# # vehicle = Vehicle('Toyota', 'Generic')  # Should ERROR
+# vehicle = Vehicle('Toyota', 'Generic')  # Should ERROR
 
-# electric = ElectricCar('Tesla', 'Model 3')
-# print(electric.start_engine())  # "Electric motor started silently"
-# print(electric.get_fuel_type())  # "Electric"
-# electric.honk()  # "Beep beep!"
+electric = ElectricCar('Tesla', 'Model 3')
+print(electric.start_engine())  # "Electric motor started silently"
+print(electric.get_fuel_type())  # "Electric"
+electric.honk()  # "Beep beep!"
 
-# gas = GasCar('Ford', 'Mustang')
-# print(gas.start_engine())  # "Vroom! Engine started"
-# print(gas.get_fuel_type())  # "Gasoline"
+gas = GasCar('Ford', 'Mustang')
+print(gas.start_engine())  # "Vroom! Engine started"
+print(gas.get_fuel_type())  # "Gasoline"
         
 
 
@@ -176,4 +165,71 @@ class MongoDB(Database):
     def execute_query(self, sql):
         return (f'Executing MongoDB query {sql}')
     
+    
+
+from abc import ABC, abstractmethod
+
+class Notification(ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def send(self, recipient, message):
+        #Send Notification
+        pass
+
+    @abstractmethod
+    def format_message(self, message):
+        #Format Message
+        pass
+
+    def log_notification(self, recipient):
+        print(f'Notification sent to {recipient}')
+
+class EmailNotification(Notification):
+    def __init__(self):
+        super().__init__()
+    
+    def format_message(self, message):
+        return (f'Subject: Notification | "{message}"') 
+
+    def send(self, recipient, message):
+        formatted = self.format_message(message)
+        print(f'Formatted: {formatted}')
+        print(f'Sending email to {recipient}')
+        self.log_notification(recipient)  
+
+class SMSNotification(Notification):
+    def __init__(self):
+        super().__init__()
+
+    def format_message(self, message):
+        if len(message) > 160:
+            return message[:160]
+        else:
+            return message
+        # or def format_message(self, message):
+        #       return message[:160]
+
+    def send(self, recipient, message):
+        formatted = self.format_message(message)
+        print(f'Formatted: {formatted}')
+        print (f'Sending SMS to {recipient}')
+        self.log_notification(recipient) 
+    
+class PushNotification(Notification):
+    def __init__(self, app_name):
+        super().__init__()
+        self.app_name = app_name
+    
+    def format_message(self, message):
+        return (f'[{self.app_name}]: {message}')
+    
+    def send(self, recipient, message):
+        formatted = self.format_message(message)
+        print(f'Formatted: {formatted}')
+        print(f'Sending push notification to {recipient}')
+        self.log_notification(recipient) 
+
+
     
