@@ -136,3 +136,68 @@ print(matrix + col)   # Column added to each column
 a = np.array([1, 2, 3])    # (3,)
 b = np.array([4, 5, 6, 7]) # (4,)
 outer = a[:, np.newaxis] * b  # a becomes (3,1), b becomes (1,4) → result (3,4)
+
+
+#SCALAR ARITMETICS IN NUMPY
+import numpy as np
+array = np.array([1,2,3,4,5])
+print(array * 4)
+print(array - 2)
+print(array + 20)
+print(array // 2)
+print(array ** 2)
+
+# [ 4  8 12 16 20]
+# [-1  0  1  2  3]
+# [21 22 23 24 25]
+# [0 1 1 2 2]
+# [ 1  4  9 16 25]
+
+#MORE SCALAR ADDITION
+import numpy as np
+array1 = np.array([2, 4, 6, 8, 10])
+array2 = np.array([3,6,8,32,6])
+
+print(array1 + array2)
+[ 5 10 14 40 16]
+
+#All Operations Work Element-wise
+array = np.array([3,5,6,7,34.7,49.4])
+print(np.sqrt(array))
+print(np.log(array))
+print(np.min(array))
+print(np.max(array))
+print(np.argmin(array))#index of the min value
+print(np.argmax(array))#index of the max value
+print(np.ceil(array))#round up
+print(np.pi(array))#TypeError: 'float' object is not callable
+
+# [1.73205081 2.23606798 2.44948974 2.64575131 5.89067059 7.02851336]
+# [1.09861229 1.60943791 1.79175947 1.94591015 3.54673969 3.89995042]
+# 3.0
+# 49.4
+# 0
+# 5
+# [ 3.  5.  6.  7. 35. 50.]
+
+
+#area of a circle
+import numpy as np
+radius = np.array([1,2,3,4,5])
+print(np.pi * radius * radius)
+print(np.pi * radius ** 2)
+
+# [ 3.14159265 12.56637061 28.27433388 50.26548246 78.53981634]
+# [ 3.14159265 12.56637061 28.27433388 50.26548246 78.53981634]
+
+#Comparison Operators
+import numpy as np
+array = np.array([2,4,6,7,97,85,23,16,21,10])
+print([array > 4])
+print((array >= 40) & (array < 100)) #you cant use the subscript here '[]'
+
+# [array([False, False,  True,  True,  True,  True,  True,  True,  True,
+#         True])]
+# [False False False False  True  True False False False False]
+
+
