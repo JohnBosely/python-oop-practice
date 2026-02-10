@@ -119,3 +119,20 @@ B = np.ones((4, 1))      # Shape: ( , 4, 1) → becomes (1, 4, 1)
 
 # Step 3: Expand dimensions where needed
 # B's shape (1, 4, 1) stretches to (3, 4, 5)
+
+# Pattern 1: Scalar to array (easiest)
+arr = np.ones((3, 4))
+result = arr + 5  # 5 broadcasts to shape (3, 4)
+
+# Pattern 2: Row/column broadcasting
+matrix = np.ones((3, 4))
+row = np.array([1, 2, 3, 4])      # Shape (4,)
+col = np.array([[1], [2], [3]])   # Shape (3, 1)
+
+print(matrix + row)   # Row added to each row of matrix
+print(matrix + col)   # Column added to each column
+
+# Pattern 3: Outer product (SO useful!)
+a = np.array([1, 2, 3])    # (3,)
+b = np.array([4, 5, 6, 7]) # (4,)
+outer = a[:, np.newaxis] * b  # a becomes (3,1), b becomes (1,4) → result (3,4)
