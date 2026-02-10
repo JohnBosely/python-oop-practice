@@ -179,8 +179,9 @@ What started as a struggle ("horizontal vs vertical shapes confuse me") turned i
 - Recognize when an array has unnecessary dimensions that can be squeezed
 
 
-Mastering Array Slicing & Indexing
 
+2/10/26
+Mastering Array Slicing & Indexing
 The Slicing Syntax That Finally Made Sense
 After confusion with slice notation, I cracked the code: arr[start:stop:step]
 - start → Where to begin (inclusive)
@@ -196,7 +197,7 @@ Key slicing patterns I now use confidently:
 - arr[-3:] → Last 3 elements
 
 The "Stop is Exclusive" Revelation
-This was my biggest "aha!" moment: arr[1:4] gives you 3 elements (indices 1, 2, 3), NOT 4!
+This was my biggest "aha" moment: arr[1:4] gives you 3 elements (indices 1, 2, 3), NOT 4!
 Think of it as: "start at 1, go UP TO but not including 4"
 
 Multidimensional Slicing - The Game Changer
@@ -290,3 +291,32 @@ Final Reflection
 The breakthrough wasn't just about arrays—it was about learning how to learn complex concepts. By breaking things down, using analogies, and practicing relentlessly, I transformed confusion into competence. Understanding that slicing returns views (not copies) and that the stop index is exclusive were the final pieces that made everything click. This pattern will serve me well for every future programming challenge.
 
 Next up: Broadcasting rules, advanced indexing techniques, and applying these skills to real data science problems!
+
+Slicing Wisdom:
+stop is exclusive - arr[1:4] gives 3 elements, not 4!
+
+Negative indices work - arr[-3:] gets last 3 elements
+
+:: for steps - arr[::2] for every other, arr[::-1] to reverse
+
+Slices are views - Use .copy() when you need independence
+
+Ellipsis ... for higher dimensions - arr[..., 0] for first column in any ND array
+
+Broadcasting Rules Cemented:
+Align from right - Start comparing dimensions from the end
+
+Dimensions must be 1 or equal - (3,) broadcasts with (1,3) or (3,3)
+
+Missing dimensions = 1 - (3,4) vs (4,) → (1,4) vs (4,)
+
+Result shape = max of each dimension - (3,1,5) + (1,4,1) → (3,4,5)
+
+Mental Models That Helped:
+Chocolate bar pack" for 3D arrays
+
+Classroom with rows of desks for shapes
+
+Picture frame for border extraction
+
+Stretching rubber bands" for broadcasting
