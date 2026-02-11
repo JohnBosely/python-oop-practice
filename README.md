@@ -320,3 +320,6 @@ Classroom with rows of desks for shapes
 Picture frame for border extraction
 
 Stretching rubber bands" for broadcasting
+
+11/2/26
+Combination of broadcasting, matrices and algebra
