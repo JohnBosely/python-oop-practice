@@ -327,3 +327,6 @@ Combination of broadcasting, matrices and algebra
 I learned vectors and scalars and how they can be useful to us, useful in engineering, physics etc.
 The book i'll be using is LINEAR ALGEBRA BY GILBERT STRANG.
 In chapter 1, he talked about how scalars can be used to increase or change the state of vectors
+
+1D, 2D, 3D DIMENSIONS
+
