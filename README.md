@@ -329,5 +329,9 @@ The book i'll be using is LINEAR ALGEBRA BY GILBERT STRANG.
 YOUTUBE VIDEO: ESSENCE OF ALGEBRA BY 3BLUE1BROWN
 In chapter 1, he talked about how scalars can be used to increase or change the state of vectors
 
-1D, 2D, 3D 
+1D, 2D, 3D DIMENSIONS
+RULES FOR BROADCATING
+1. Dimensions are equal
+2. A dimension has a value of 1
+3. A dimension doesnt exist
 
