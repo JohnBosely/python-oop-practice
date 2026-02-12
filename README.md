@@ -338,6 +338,9 @@ RULES FOR BROADCATING
 VECTORS.
 1. Vector addition v + w and linear combination cv + dw
 
+
+A vector with 2 coordinates (2d vector) 
+
 HOW TO REPRESENT VECTORS
 1. Numbers
 2. Arrows
