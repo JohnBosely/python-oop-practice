@@ -335,3 +335,11 @@ RULES FOR BROADCATING
 2. A dimension has a value of 1
 3. A dimension doesnt exist
 
+VECTORS.
+1. Vector addition v + w and linear combination cv + dw
+
+HOW TO REPRESENT VECTORS
+1. Numbers
+2. Arrows
+3. Pointing in the plane
+
