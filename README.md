@@ -346,5 +346,44 @@ HOW TO REPRESENT VECTORS
 2. Arrows
 3. Pointing in the plane
 
-LINEAR TRANSFORMATION
-MATRICES AS COMPOSITION
+
+2/14/2026
+Matrix Multiplication and Inverse Matrices
+
+Matrix-Vector Multiplication (The Column Way)
+
+A matrix multiplied by a vector produces a linear combination of the matrix columns. Given matrix A with columns v₁, v₂, ..., vₙ and vector x with entries (x₁, x₂, ..., xₙ), the product Ax equals:
+
+Ax = x₁v₁ + x₂v₂ + ... + xₙvₙ
+
+This means the output vector is formed by taking each column of A, multiplying it by the corresponding entry in x, and adding the results together.
+
+The Difference Matrix Example
+
+The difference matrix A takes the differences between components of an input vector:
+
+A = [ 1  0  0 ]
+[-1  1  0 ]
+[ 0 -1  1 ]
+
+For x = (x₁, x₂, x₃), Ax = (x₁, x₂ - x₁, x₃ - x₂). This computes how each component changes from the previous one.
+
+The Inverse Matrix (Sum Matrix)
+
+The inverse matrix A⁻¹ undoes the action of A. For the difference matrix, the inverse is the sum matrix S:
+
+S = [ 1 0 0 ]
+[ 1 1 0 ]
+[ 1 1 1 ]
+
+If Ax = b, then x = A⁻¹b. For the difference matrix, this means:
+x₁ = b₁
+x₂ = b₁ + b₂
+x₃ = b₁ + b₂ + b₃
+
+The defining property of an inverse matrix is A⁻¹A = I, where I is the identity matrix (ones on diagonal, zeros elsewhere).
+
+The Cyclic Matrix and Singularity
+
+Changing one column creates the cyclic matrix C:
+
