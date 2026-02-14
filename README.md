@@ -387,3 +387,16 @@ The Cyclic Matrix and Singularity
 
 Changing one column creates the cyclic matrix C:
 
+C = [ 1  0 -1 ]
+[-1  1  0 ]
+[ 0 -1  1 ]
+
+Cx = (x₁ - x₃, x₂ - x₁, x₃ - x₂). For Cx = b to have a solution, b₁ + b₂ + b₃ must equal zero. This restriction exists because the columns of C are dependent. Unlike A, matrix C has no inverse and is called singular.
+
+Key Takeaways
+
+· Matrix multiplication by a vector is a linear combination of columns
+· An invertible matrix has an inverse that undoes its action
+· A matrix is invertible only if its columns are independent
+· For an invertible matrix, Ax = b has exactly one solution: x = A⁻¹b
+· For a singular matrix, Ax = b may have no solution or infinitely many solutions
