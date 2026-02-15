@@ -470,3 +470,6 @@ Example given:
 
 A rotation matrix (45 degrees)
 
+Pythontheta = np.pi / 4
+rot = np.array([[np.cos(theta), -np.sin(theta)],[np.sin(theta),  np.cos(theta)]])
+When you do rot @ points, every point is rotated — this is how games, graphics, and many ML models transform data.
