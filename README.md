@@ -400,3 +400,73 @@ Key Takeaways
 · A matrix is invertible only if its columns are independent
 · For an invertible matrix, Ax = b has exactly one solution: x = A⁻¹b
 · For a singular matrix, Ax = b may have no solution or infinitely many solutions
+
+
+15/2/26
+NumPy Crash Course – Core Examples
+1. Creating vectors and matrices
+Pythonimport numpy as np
+
+vec1 = np.array([1, 2, 3])          # shape: (3,)
+vec2 = np.array([4, 5, 6])
+
+mat1 = np.array([[1, 2], [3, 4]])           # shape: (2, 2)
+mat2 = np.array([[5, 6],[7, 8]])
+2. Dot product
+Pythondot = np.dot(vec1, vec2)     # or vec1 @ vec2
+# 1*4 + 2*5 + 3*6 = 32
+3. Matrix multiplication
+Pythonresult = mat1 @ mat2
+# [[1*5 + 2*7, 1*6 + 2*8],
+#  [3*5 + 4*7, 3*6 + 4*8]]
+# = [[19, 22],
+#    [43, 50]]
+Important rule: For A @ B to work, inner dimensions must match:
+
+A: (m × k)
+B: (k × n)
+→ result: (m × n)
+
+Broadcasting lets you operate on arrays of different shapes by automatically "stretching" the smaller one — no loops needed.
+Core broadcasting examples
+
+Scalar + array
+
+Pythonarr = np.array([1, 2, 3])
+print(arr + 10)          # [11 12 13]
+
+Vector + matrix (row-wise broadcast)
+
+Pythonvec = np.array([1, 2, 3])        # shape (3,)
+mat = np.ones((3, 3))            # shape (3,3)
+print(vec + mat)
+# [[2 3 4]
+#  [2 3 4]
+#  [2 3 4]]
+
+Column vector + row vector (creates a grid)
+
+Pythoncol = np.array([[1], [2], [3]])   # shape (3,1)
+row = np.array([10, 20, 30])      # shape (3,)
+print(col + row)
+# [[11 21 31]
+#  [12 22 32]
+#  [13 23 33]]
+
+Typical ML use-case: subtract mean from each column
+
+Pythondata = np.random.randn(5, 3)          # 5 samples, 3 features
+means = data.mean(axis=0)             # shape (3,)
+normalized = data - means             # broadcasts automatically
+Broadcasting rules (simple version):
+
+Compare shapes from the right (trailing dimensions)
+Dimensions of size 1 get stretched to match
+If sizes don’t match and neither is 1 → error
+
+Visualization Concept (Transformation Example)
+I also learnt how matrix multiplication = linear transformation of space.
+Example given:
+
+A rotation matrix (45 degrees)
+
