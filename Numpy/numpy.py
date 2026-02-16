@@ -27,8 +27,6 @@ print(word)
 # Achievement: Mastered 3D array shapes, explored 4D arrays
 
 
-import numpy as np
-
 # All the arrays I analyzed
 MY_ARRAYS = {
     "basic_3d": [[[1,2,3],[4,5,6]],[[7,8,9],[10,11,12]]],
@@ -159,7 +157,7 @@ array1 = np.array([2, 4, 6, 8, 10])
 array2 = np.array([3,6,8,32,6])
 
 print(array1 + array2)
-[ 5 10 14 40 16]
+# [ 5 10 14 40 16]
 
 #All Operations Work Element-wise
 array = np.array([3,5,6,7,34.7,49.4])
@@ -200,4 +198,149 @@ print((array >= 40) & (array < 100)) #you cant use the subscript here '[]'
 #         True])]
 # [False False False False  True  True False False False False]
 
+
+import numpy as np
+prices = np.array([100, 150, 200, 80])
+tax_rate = 0.07
+
+price_after_tax = prices * tax_rate
+print(price_after_tax)
+
+
+# # Linear Algebra Deep Dive – Days 28–31  
+# Focus: Vectors, Matrices, Dot Products, Matrix Multiplication, Broadcasting, Rank, Determinants
+
+# ## Overview
+# Hands-on NumPy practice building intuition for core linear algebra concepts.  
+# Started with vectors/matrices/dot products/matrix multiply, then deep-dived into broadcasting, and finished with rank & determinants.
+
+# Goal: Solid foundation before eigenvalues, eigenvectors, and SVD.
+
+# ## 1. Vectors, Matrices, Dot Products & Matrix Multiplication
+
+### Basic operations
+import numpy as np
+
+# Vectors
+vec1 = np.array([1, 2, 3])
+vec2 = np.array([4, 5, 6])
+
+# Dot product
+dot_prod = np.dot(vec1, vec2)          # 32
+# or modern: vec1 @ vec2
+
+# Matrices
+mat1 = np.array([[1, 2], [3, 4]])
+mat2 = np.array([[5, 6], [7, 8]])
+
+# Matrix multiplication
+mat_prod = mat1 @ mat2
+# [[19 22]
+#  [43 50]]
+
+### Matrix multiply from scratch (to understand mechanics)
+def matmul_scratch(A, B):
+    m, k = A.shape
+    _, n = B.shape
+    C = np.zeros((m, n))
+    for i in range(m):
+        for j in range(n):
+            for p in range(k):
+                C[i, j] += A[i, p] * B[p, j]
+    return C
+
+print(matmul_scratch(mat1, mat2))  # same as mat1 @ mat2
+
+
+## 2. Broadcasting – Heavy Practice
+
+### Column-wise operations (most common: feature normalization)
+data = np.array([
+    [100,  5.2,  23],
+    [120,  6.1,  15],
+    [ 90,  4.8,  40],
+    [150,  7.0,   8]
+])
+
+means = np.mean(data, axis=0)          # shape (3,)
+centered = data - means                # broadcasting: (4,3) - (3,) → (4,3) - (1,3)
+
+### Row-wise operations
+weights = np.array([1.1, 0.9, 1.2, 1.0])   # (4,)
+weighted = data * weights[:, np.newaxis]   # (4,) → (4,1) → broadcasts down
+
+### Per-column adjustment (opposite direction)
+
+discount_factors = np.array([0.9, 0.85, 0.95])   # (3,)
+discounted = prices * discount_factors[np.newaxis, :]  # (1,3) → broadcasts across
+
+### Row-centered (subtract row means)
+
+row_means = np.mean(X, axis=1)                    # (5,)
+centered_rows = X - row_means[:, np.newaxis]      # key: [:, np.newaxis]
+
+### Additive grid / outer sum
+row_add = np.array([0, 5, 10, 15])        # (4,)
+col_add = np.array([0, 1, 2, 3, 4])       # (5,)
+result = base + row_add[:, np.newaxis] + col_add[np.newaxis, :]
+
+### Multiplication table via broadcasting
+
+row_values = np.array([2, 3, 4, 5])     # (4,)
+col_values = np.array([1, 10, 100])     # (3,)
+table = row_values[:, np.newaxis] * col_values[np.newaxis, :]
+# [[  2   20  200]
+#  [  3   30  300]
+#  [  4   40  400]
+#  [  5   50  500]]
+
+## 3. Rank
+
+
+# Quick rank checks
+print(np.linalg.matrix_rank(A))          # e.g. identity → n
+
+M1 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 0]])          # rank 2
+M2 = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]])          # rank 1
+print(np.linalg.matrix_rank(M1))         # 2
+print(np.linalg.matrix_rank(M2))         # 1
+
+## 4. Determinant
+
+
+# Basic det
+A = np.array([[1, 2], [3, 4]])
+print(np.linalg.det(A))                  # -2.0
+
+# Singular case (dependent rows)
+B = np.array([[1, 2], [2, 4]])
+print(np.linalg.det(B))                  # 0.0
+
+# Diagonal
+C = np.array([[1, 0, 0], [0, 2, 0], [0, 0, 3]])
+print(np.linalg.det(C))                  # 6.0
+
+# Squished to line
+E = np.array([[2, 1], [4, 2]])
+print(np.linalg.det(E))                  # 0.0
+
+# Full rank 3×3
+F = np.array([[3, 1, 0], [0, 2, 1], [1, 0, 4]])
+print(np.linalg.det(F))                  # 25.0
+
+### Combined rank + det check
+
+rank = np.linalg.matrix_rank(M)
+det  = np.linalg.det(M)
+print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
+
+## Core Rules to Remember
+
+# Broadcasting
+# - `[:, np.newaxis]` → stretch down (per-row)
+# - `[np.newaxis, :]` → stretch across (per-column)
+
+# **Rank & Determinant**
+# - rank(A) < n  ⇔  det(A) = 0  ⇔  singular / not invertible
+# - rank(A) = n  ⇔  det(A) ≠ 0  ⇔  full rank / invertible
 
