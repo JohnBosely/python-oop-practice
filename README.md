@@ -474,4 +474,114 @@ Pythontheta = np.pi / 4
 rot = np.array([[np.cos(theta), -np.sin(theta)],[np.sin(theta),  np.cos(theta)]])
 When you do rot @ points, every point is rotated — this is how games, graphics, and many ML models transform data.
 
-TOMMOROW WILL BE TO LEARN HOW TO CODE MATRIX MULTIPLICATION
+
+Here's a clean, structured summary you can copy-paste directly into a README.md file (or notes). It captures the main journey and key concepts we covered today in a concise, useful way.
+
+```markdown
+# Linear Algebra Deep Dive – Days 28–31 (Focus: Vectors, Matrices, Broadcasting, Rank, Determinants)
+
+## Overview
+Hands-on session building intuition and NumPy muscle memory for vectors, matrices, dot products, matrix multiplication, broadcasting, rank, and determinants.  
+Goal: Make these feel natural before moving to eigenvalues and SVD.
+
+## What We Covered Today
+
+### 1. Vectors & Matrices Basics (Recap + Application)
+- Vectors: 1D arrays (features, points, ratings)
+- Matrices: 2D arrays (datasets, transformations, weights)
+- Dot product: similarity / projection / weighted sum
+- Matrix multiplication: linear transformations + neural network layers
+
+Real applications shown:
+- Cosine similarity for recommendations
+- Rotating points / images
+- Predicting prices: `features @ weights`
+
+### 2. Broadcasting in NumPy (Heavy Practice)
+Broadcasting = NumPy automatically stretches smaller arrays during operations (no loops needed).
+
+Key patterns mastered:
+```python
+# Per-column (most common in ML – feature normalization)
+data - means[np.newaxis, :]               # means: (n_features,) → (1, n_features)
+
+# Per-row (e.g. scale each sample differently)
+X * weights[:, np.newaxis]                # weights: (n_samples,) → (n_samples, 1)
+
+# Outer product style (multiplication table, additive grid)
+row_values[:, np.newaxis] * col_values[np.newaxis, :]
+```
+
+Important exercises:
+- Centering data (subtract column means)
+- Row-wise mean subtraction
+- Per-column discounts / bonuses
+- Per-row scaling (user enthusiasm, house weights)
+- Creating grids with broadcasting (row + column effects)
+
+Golden rule:
+- `[:, np.newaxis]` → stretch **down** (affect rows differently)
+- `[np.newaxis, :]` → stretch **across** (affect columns differently)
+
+### 3. Rank
+Rank = number of linearly independent rows (or columns) = dimension of the column space / row space.
+
+Key intuitions:
+- Rank = full size (n for n×n) → full information, invertible
+- Rank < n → redundancy / linear dependence → collapses dimensions
+- Rank 0 → everything maps to zero
+
+NumPy: `np.linalg.matrix_rank(A)`
+
+Examples we looked at:
+- Identity → rank = n
+- Repeated rows/columns → rank 1
+- [[1,2,3],[4,5,6],[7,8,9]] → rank 2
+- Random 4×6 matrix → rank ≤ 4
+
+### 4. Determinant
+Determinant = signed volume scaling factor of the linear transformation.
+
+Key properties:
+- det = 0 ⇔ singular ⇔ not invertible ⇔ rank < n ⇔ columns/rows linearly dependent
+- |det| = how much area/volume is scaled
+- sign(det) = orientation preserved (+) or flipped (−)
+- For rotations/shears → |det| = 1 (area-preserving)
+
+NumPy: `np.linalg.det(A)`
+
+Memorable cases:
+- [[2,1],[4,2]] → det = 0 (rows dependent, collapses to line)
+- Diagonal matrix diag(1,2,3) → det = 1×2×3 = 6
+- 3×3 with no obvious dependence → det = 25 (full rank, invertible)
+- Tiny change (0 → 0.0001 on diagonal) → det very small but ≠ 0
+
+### Core Connection
+For square matrices:
+```
+rank(A) < n  ⇔  det(A) = 0  ⇔  A is singular / not invertible
+rank(A) = n  ⇔  det(A) ≠ 0  ⇔  A is invertible
+```
+
+### Next Topics (planned)
+- Eigenvalues & eigenvectors (intuition: special directions & stretch factors)
+- SVD (embeddings, low-rank approximation, compression)
+
+## Takeaways / Cheatsheet Snippets
+
+```python
+# Broadcasting reminders
+per_column = matrix + vector[np.newaxis, :]
+per_row    = matrix + vector[:, np.newaxis]
+
+# Rank & Det quick check
+rank = np.linalg.matrix_rank(M)
+det  = np.linalg.det(M)
+print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
+```
+
+Feel free to add your own code snippets, plots, or questions as you continue.
+```
+
+You can tweak headings, add emojis, or paste in specific code outputs if you want.  
+Let me know if you'd like a shorter version, more code blocks, or anything rephrased for your style!
