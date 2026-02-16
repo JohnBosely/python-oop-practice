@@ -332,7 +332,7 @@ print(np.linalg.det(F))                  # 25.0
 
 rank = np.linalg.matrix_rank(M)
 det  = np.linalg.det(M)
-# print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
+print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
 
 ## Core Rules to Remember
 
