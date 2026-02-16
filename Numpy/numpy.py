@@ -337,10 +337,10 @@ print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
 ## Core Rules to Remember
 
 # Broadcasting
-# - `[:, np.newaxis]` → stretch down (per-row)
-# - `[np.newaxis, :]` → stretch across (per-column)
+# - [:, np.newaxis] → stretch down (per-row)
+# - [np.newaxis, :] → stretch across (per-column)
 
-# **Rank & Determinant**
+# Rank & Determinant
 # - rank(A) < n  ⇔  det(A) = 0  ⇔  singular / not invertible
 # - rank(A) = n  ⇔  det(A) ≠ 0  ⇔  full rank / invertible
 
