@@ -344,3 +344,82 @@ print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
 # - rank(A) < n  ⇔  det(A) = 0  ⇔  singular / not invertible
 # - rank(A) = n  ⇔  det(A) ≠ 0  ⇔  full rank / invertible
 
+
+# ───────────────────────────────────────────────────────────────
+# Matrix B from previous session – diagonal stretch
+# We confirmed eigenvalues 4 and 1, eigenvectors along axes
+# ───────────────────────────────────────────────────────────────
+
+B = np.array([[4, 0],
+              [0, 1]])
+
+# Manual check for λ = 4
+# B @ [1,0] = [4,0] = 4 * [1,0]   ← x-axis stretched 4×
+# B @ [0,1] = [0,1] = 1 * [0,1]   ← y-axis unchanged
+
+# Example transformation of a general vector
+v = np.array([3, 2])
+print(B @ v)           # → [12, 2]   x stretched 4×, y unchanged
+
+# ───────────────────────────────────────────────────────────────
+# Manual eigenvector calculation style we practiced
+# (shown here for the first matrix we solved manually earlier)
+# ───────────────────────────────────────────────────────────────
+
+A = np.array([[3, 1],
+              [0, 2]])
+
+# For λ = 3
+# (A - 3I)v = 0
+# [[0, 1], [0, -1]] [x,y]^T = 0
+# → y = 0
+# Eigenvector: any [x, 0] → we chose [1, 0]
+
+# For λ = 2
+# (A - 2I)v = 0
+# [[1, 1], [0, 0]] [x,y]^T = 0
+# → x + y = 0 → y = -x
+# Eigenvector: [1, -1] (or multiples)
+
+# ───────────────────────────────────────────────────────────────
+# The 5 matrices you answered today (for reference)
+# ───────────────────────────────────────────────────────────────
+
+# 1. Diagonal – obvious
+M1 = np.array([[5, 0],
+               [0, 2]])
+
+# 2. Multiple of identity – every vector is eigenvector
+M2 = np.array([[3, 0],
+               [0, 3]])
+
+# 3. Negative diagonal
+M3 = np.array([[-4, 0],
+               [ 0,-1]])
+
+# 4. Upper triangular – one eigenvector obvious, one solved
+M4 = np.array([[6, 1],
+               [0, 2]])
+
+# 5. Jordan block – repeated λ=1, only ONE independent eigenvector
+M5 = np.array([[1, 4],
+               [0, 1]])
+
+# Quick NumPy check style (for verification when you want)
+# eigenvalues, eigenvectors = np.linalg.eig(M)
+# But we focused on manual solving today
+
+# ───────────────────────────────────────────────────────────────
+# Quick test vectors we discussed conceptually
+# ───────────────────────────────────────────────────────────────
+
+# For M5 (Jordan case)
+v = np.array([1, 0])          # is eigenvector → M5 @ v = [1, 0]
+print(M5 @ v)
+
+v2 = np.array([0, 1])         # is NOT eigenvector
+print(M5 @ v2)                # → [4, 1]  (changes direction)
+
+# ───────────────────────────────────────────────────────────────
+# End of today's code pieces
+# ───────────────────────────────────────────────────────────────
