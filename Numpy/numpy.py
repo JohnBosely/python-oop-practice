@@ -345,10 +345,6 @@ print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
 # - rank(A) = n  ⇔  det(A) ≠ 0  ⇔  full rank / invertible
 
 
-# ───────────────────────────────────────────────────────────────
-# Matrix B from previous session – diagonal stretch
-# We confirmed eigenvalues 4 and 1, eigenvectors along axes
-# ───────────────────────────────────────────────────────────────
 
 B = np.array([[4, 0],
               [0, 1]])
@@ -361,10 +357,7 @@ B = np.array([[4, 0],
 v = np.array([3, 2])
 print(B @ v)           # → [12, 2]   x stretched 4×, y unchanged
 
-# ───────────────────────────────────────────────────────────────
-# Manual eigenvector calculation style we practiced
-# (shown here for the first matrix we solved manually earlier)
-# ───────────────────────────────────────────────────────────────
+
 
 A = np.array([[3, 1],
               [0, 2]])
@@ -381,9 +374,6 @@ A = np.array([[3, 1],
 # → x + y = 0 → y = -x
 # Eigenvector: [1, -1] (or multiples)
 
-# ───────────────────────────────────────────────────────────────
-# The 5 matrices you answered today (for reference)
-# ───────────────────────────────────────────────────────────────
 
 # 1. Diagonal – obvious
 M1 = np.array([[5, 0],
@@ -409,17 +399,9 @@ M5 = np.array([[1, 4],
 # eigenvalues, eigenvectors = np.linalg.eig(M)
 # But we focused on manual solving today
 
-# ───────────────────────────────────────────────────────────────
-# Quick test vectors we discussed conceptually
-# ───────────────────────────────────────────────────────────────
-
 # For M5 (Jordan case)
 v = np.array([1, 0])          # is eigenvector → M5 @ v = [1, 0]
 print(M5 @ v)
 
 v2 = np.array([0, 1])         # is NOT eigenvector
 print(M5 @ v2)                # → [4, 1]  (changes direction)
-
-# ───────────────────────────────────────────────────────────────
-# End of today's code pieces
-# ───────────────────────────────────────────────────────────────
