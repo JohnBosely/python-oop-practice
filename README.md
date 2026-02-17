@@ -475,10 +475,7 @@ rot = np.array([[np.cos(theta), -np.sin(theta)],[np.sin(theta),  np.cos(theta)]]
 When you do rot @ points, every point is rotated — this is how games, graphics, and many ML models transform data.
 
 
-Here's a clean, structured summary you can copy-paste directly into a README.md file (or notes). It captures the main journey and key concepts we covered today in a concise, useful way.
-
-```markdown
-# Linear Algebra Deep Dive – Days 28–31 (Focus: Vectors, Matrices, Broadcasting, Rank, Determinants)
+Focus: Vectors, Matrices, Broadcasting, Rank, Determinants
 
 ## Overview
 Hands-on session building intuition and NumPy muscle memory for vectors, matrices, dot products, matrix multiplication, broadcasting, rank, and determinants.  
@@ -501,7 +498,7 @@ Real applications shown:
 Broadcasting = NumPy automatically stretches smaller arrays during operations (no loops needed).
 
 Key patterns mastered:
-```python
+python
 # Per-column (most common in ML – feature normalization)
 data - means[np.newaxis, :]               # means: (n_features,) → (1, n_features)
 
@@ -510,7 +507,7 @@ X * weights[:, np.newaxis]                # weights: (n_samples,) → (n_samples
 
 # Outer product style (multiplication table, additive grid)
 row_values[:, np.newaxis] * col_values[np.newaxis, :]
-```
+
 
 Important exercises:
 - Centering data (subtract column means)
@@ -558,10 +555,10 @@ Memorable cases:
 
 ### Core Connection
 For square matrices:
-```
+
 rank(A) < n  ⇔  det(A) = 0  ⇔  A is singular / not invertible
 rank(A) = n  ⇔  det(A) ≠ 0  ⇔  A is invertible
-```
+
 
 ### Next Topics (planned)
 - Eigenvalues & eigenvectors (intuition: special directions & stretch factors)
@@ -569,7 +566,7 @@ rank(A) = n  ⇔  det(A) ≠ 0  ⇔  A is invertible
 
 ## Takeaways / Cheatsheet Snippets
 
-```python
+python
 # Broadcasting reminders
 per_column = matrix + vector[np.newaxis, :]
 per_row    = matrix + vector[:, np.newaxis]
@@ -578,10 +575,46 @@ per_row    = matrix + vector[:, np.newaxis]
 rank = np.linalg.matrix_rank(M)
 det  = np.linalg.det(M)
 print(f"Rank: {rank}, Det: {det:.4f}, Invertible? {det != 0}")
-```
 
-Feel free to add your own code snippets, plots, or questions as you continue.
-```
 
-You can tweak headings, add emojis, or paste in specific code outputs if you want.  
-Let me know if you'd like a shorter version, more code blocks, or anything rephrased for your style!
+Linear Algebra Session – February 17, 2026
+Topic focus: Eigenvalues & Eigenvectors (2×2 matrices) – manual calculation + intuition
+What we covered today
+
+Reviewed and confirmed understanding of the previous matrix [[4,0],[0,1]] using the manual eigenvector equation method (A v = λ v → (A − λ I) v = 0)
+Solved for eigenvectors step-by-step using row reduction / substitution (same style used on [[3,1],[0,2]])
+Visualized what the eigenvectors mean on the graph (x-axis stretched ×4, y-axis unchanged ×1)
+Compared diagonal matrices (easy eigenvectors = axes) vs upper-triangular / non-diagonal cases (eigenvectors rotated or tilted)
+Practiced recognizing:
+repeated eigenvalues
+full eigenspace (dimension 2)
+defective case (geometric multiplicity < algebraic multiplicity)
+
+Did the first 5 planned 2×2 eigenvalue/eigenvector problems (increasing difficulty)
+Discussed:
+Diagonal matrices → eigenvectors = coordinate axes
+Repeated eigenvalue 3×I → every vector is eigenvector
+Negative eigenvalues → flip + scale
+Jordan-like case (only one independent eigenvector even with multiplicity 2)
+How to interpret stretch factors and directions on the plane
+
+
+Key concepts reinforced today
+
+Eigenvector = direction unchanged (only scaled) by the matrix
+Eigenvalue = the scaling factor (positive = stretch/same, negative = flip+scale, zero = collapse)
+For 2×2 matrices: solve characteristic equation or directly solve (A − λI)v = 0
+Diagonal matrices are the easiest to read intuitively
+When eigenvalues are repeated:
+geometric multiplicity can be 1 or 2
+if = 2 → diagonalizable, full plane
+if = 1 → defective, only one direction
+
+Graph intuition: eigenvectors show the “natural stretching axes” of the transformation
+
+Progress & next
+
+Comfortable with manual 2×2 eigenvector solving via systems of equations
+Good intuition for diagonal and near-diagonal cases
+Started practicing mixed cases (shear-like, rotation-like)
+Remaining: finish the 10-matrix set (#6–#10), then move toward 3×3 intuition or connect to SVD
