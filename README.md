@@ -613,8 +613,33 @@ if = 1 → defective, only one direction
 Graph intuition: eigenvectors show the “natural stretching axes” of the transformation
 
 Progress & next
-
 Comfortable with manual 2×2 eigenvector solving via systems of equations
 Good intuition for diagonal and near-diagonal cases
 Started practicing mixed cases (shear-like, rotation-like)
 Remaining: finish the 10-matrix set (#6–#10), then move toward 3×3 intuition or connect to SVD
+
+(Feb 18, 2026)
+Linear Algebra – Extra 2×2 Eigenvalue & Eigenvector Drills
+Date: February 18, 2026
+Goal: Solidify manual calculation of eigenvalues and eigenvectors for 2×2 matrices, including repeated, defective, and complex cases
+What we did in this extra session
+
+Completed the first 10 matrices from the list (user submitted partial batches)
+Reviewed answers for matrices 6, 8, 9, 10 with detailed corrections
+Added 3 more matrices (#11–13) specifically requested (keep session short)
+Focused on manual solving using:
+Characteristic polynomial (trace & det for quick roots)
+Solving (A − λI)v = 0 row by row
+Recognizing when eigenvectors are real vs complex
+Understanding geometric vs algebraic multiplicity for repeated eigenvalues
+
+
+Key patterns reinforced
+
+Diagonal matrices → eigenvalues = diagonal entries, eigenvectors = axes
+Scalar multiple of identity → repeated eigenvalue, entire plane is eigenspace
+Upper-triangular → one eigenvalue obvious, solve system for the other
+Rotation/scaling matrices → complex conjugate eigenvalues (no real eigenvectors)
+Defective matrices → repeated eigenvalue but only one independent eigenvector
+Graph intuition: eigenvectors = "natural stretch/flip directions", eigenvalues = stretch factors
+
