@@ -405,3 +405,48 @@ print(M5 @ v)
 
 v2 = np.array([0, 1])         # is NOT eigenvector
 print(M5 @ v2)                # → [4, 1]  (changes direction)
+
+
+# Matrix 6 – [[4, -2], [1, 3]]
+# User guessed λ=6 & 5, close directions but swapped
+# Correct: λ=5 → v=[-2,1] or [2,-1]
+#         λ=2 → v=[1,1] or [-1,-1]
+
+# Matrix 8 – [[5, 4], [2, 3]]
+# User: λ=7 & 1, v=(2,1) and (1,-1)
+# → Perfect match
+
+# Matrix 9 – [[1, 1], [-1, 1]]
+# User guessed repeated λ=2
+# Correct: complex eigenvalues 1+i and 1-i
+# No real eigenvectors (rotation + scaling)
+# Characteristic poly: λ² - 2λ + 2 = 0
+
+# Matrix 10 – [[0, -1], [1, 0]]
+# User guessed repeated λ=1
+# Correct: λ = i and -i (pure 90° rotation)
+# No real eigenvectors
+# Characteristic poly: λ² + 1 = 0
+
+# Extra requested: Matrix 11 – [[5, 3], [1, 3]]
+# User: λ=2 & 6, v=(1,-1) and (1,3)
+# Correct: λ=6 → [3,1] or [1,1/3]  (user's (1,3) is proportional)
+#         λ=2 → [1,-1]
+# → Directions correct, just scaling difference
+
+# Extra: Matrix 12 – [[4, 0], [0, 4]]
+# User: λ=4 (multiplicity 2), v=(1,1)
+# Correct: λ=4 (multiplicity 2)
+# Eigenspace = all of ℝ² (every vector is eigenvector)
+
+
+# Extra: Matrix 13 – [[0, -2], [2, 0]]
+# User: root 2i, no real eigenvector
+# Correct: λ = 2i and -2i
+# (scaled 90° rotation by factor 2)
+# No real eigenvectors
+# Characteristic poly: λ² + 4 = 0
+
+# Quick NumPy verification style (optional – we focused on manual)
+# eigenvalues, eigenvectors = np.linalg.eig(matrix)
+# But today's emphasis was hand calculation
