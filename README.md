@@ -477,13 +477,13 @@ When you do rot @ points, every point is rotated — this is how games, graphics
 
 Focus: Vectors, Matrices, Broadcasting, Rank, Determinants
 
-## Overview
+ Overview
 Hands-on session building intuition and NumPy muscle memory for vectors, matrices, dot products, matrix multiplication, broadcasting, rank, and determinants.  
 Goal: Make these feel natural before moving to eigenvalues and SVD.
 
-## What We Covered Today
+ What We Covered Today
 
-### 1. Vectors & Matrices Basics (Recap + Application)
+# 1. Vectors & Matrices Basics (Recap + Application)
 - Vectors: 1D arrays (features, points, ratings)
 - Matrices: 2D arrays (datasets, transformations, weights)
 - Dot product: similarity / projection / weighted sum
@@ -492,9 +492,9 @@ Goal: Make these feel natural before moving to eigenvalues and SVD.
 Real applications shown:
 - Cosine similarity for recommendations
 - Rotating points / images
-- Predicting prices: `features @ weights`
+- Predicting prices: features @ weights
 
-### 2. Broadcasting in NumPy (Heavy Practice)
+# 2. Broadcasting in NumPy (Heavy Practice)
 Broadcasting = NumPy automatically stretches smaller arrays during operations (no loops needed).
 
 Key patterns mastered:
@@ -517,10 +517,10 @@ Important exercises:
 - Creating grids with broadcasting (row + column effects)
 
 Golden rule:
-- `[:, np.newaxis]` → stretch **down** (affect rows differently)
-- `[np.newaxis, :]` → stretch **across** (affect columns differently)
+- [:, np.newaxis] → stretch **down** (affect rows differently)
+- [np.newaxis, :] → stretch **across** (affect columns differently)
 
-### 3. Rank
+# 3. Rank
 Rank = number of linearly independent rows (or columns) = dimension of the column space / row space.
 
 Key intuitions:
@@ -528,7 +528,7 @@ Key intuitions:
 - Rank < n → redundancy / linear dependence → collapses dimensions
 - Rank 0 → everything maps to zero
 
-NumPy: `np.linalg.matrix_rank(A)`
+NumPy: np.linalg.matrix_rank(A)
 
 Examples we looked at:
 - Identity → rank = n
@@ -536,7 +536,7 @@ Examples we looked at:
 - [[1,2,3],[4,5,6],[7,8,9]] → rank 2
 - Random 4×6 matrix → rank ≤ 4
 
-### 4. Determinant
+# 4. Determinant
 Determinant = signed volume scaling factor of the linear transformation.
 
 Key properties:
@@ -545,7 +545,7 @@ Key properties:
 - sign(det) = orientation preserved (+) or flipped (−)
 - For rotations/shears → |det| = 1 (area-preserving)
 
-NumPy: `np.linalg.det(A)`
+NumPy: np.linalg.det(A)
 
 Memorable cases:
 - [[2,1],[4,2]] → det = 0 (rows dependent, collapses to line)
@@ -553,18 +553,18 @@ Memorable cases:
 - 3×3 with no obvious dependence → det = 25 (full rank, invertible)
 - Tiny change (0 → 0.0001 on diagonal) → det very small but ≠ 0
 
-### Core Connection
+# Core Connection
 For square matrices:
 
 rank(A) < n  ⇔  det(A) = 0  ⇔  A is singular / not invertible
 rank(A) = n  ⇔  det(A) ≠ 0  ⇔  A is invertible
 
 
-### Next Topics (planned)
+# Next Topics (planned)
 - Eigenvalues & eigenvectors (intuition: special directions & stretch factors)
 - SVD (embeddings, low-rank approximation, compression)
 
-## Takeaways / Cheatsheet Snippets
+ Takeaways / Cheatsheet Snippets
 
 python
 # Broadcasting reminders
@@ -643,3 +643,136 @@ Rotation/scaling matrices → complex conjugate eigenvalues (no real eigenvector
 Defective matrices → repeated eigenvalue but only one independent eigenvector
 Graph intuition: eigenvectors = "natural stretch/flip directions", eigenvalues = stretch factors
 
+
+
+Date: February 18, 2026  
+Topics Covered: Vectors → Linear Independence → Span → Change of Basis
+ 1. Vectors and Basic Operations
+
+We started with v = (1,1,0) and w = (0,1,1) and covered:
+
+-*Dot Product: Sum of products of corresponding components
+- Cross Product:A vector perpendicular to both v and w
+- Magnitude: |v| = √(x² + y² + z²)
+- Angle Between Vectors: cos(θ) = (v·w) / (|v||w|)
+
+
+ 2. Linear Independence
+
+Two vectors are linearly independent if neither is a scalar multiple of the other — they point in genuinely different directions.
+
+The Scalar Multiple Test: If v = (1,1,0) and w = (0,1,1), try to find k such that kv = w:
+- x: k·1 = 0 → k = 0
+- y: k·1 = 1 → k = 1 — **Contradiction!
+
+Since no single k works, they are independent.
+
+Key Rule:
+| Vectors | Result |
+|---------|--------|
+| 1 independent vector | A Line |
+| 2 independent vectors | A Plane |
+| 3 independent vectors | All of R³ |
+
+
+ 3. Linear Combinations and Span
+
+Any combination cv + dw is like choosing how many scoops of each vector to use.
+
+For v = (1,1,0) and w = (0,1,1):
+
+
+c·(1,1,0) + d·(0,1,1) = (c, c+d, d)
+
+
+Setting x=c, z=d, y=c+d → the rule of the plane is:
+
+
+y = x + z
+
+
+Every reachable point satisfies this equation. Points off the plane (like (0,0,1)) cannot be reached.
+
+
+ 4. The "Scoop" Intuition
+
+- Scaling a vector = choosing how many scoops to use
+- You cannot change one coordinate without dragging the others along
+- This "linkage" is what traps combinations on a flat plane
+
+Example with v = (2,1) and w = (1,2):
+
+cv + dw = (2c+d, c+2d)
+
+Any point (x,y) in the span follows this formula.
+
+
+ 5. Change of Basis
+
+# What It Is
+A basis is your coordinate rulers. Change of basis = swapping to different rulers while the space stays the same.
+
+# The Matrix P
+Build P by putting your new basis vectors as columns:
+
+
+b₁ = (2,1), b₂ = (0,1)
+
+P = | 2  0 |
+    | 1  1 |
+
+
+# Two Directions
+| Direction | Operation | Meaning |
+|-----------|-----------|---------|
+| New → Standard | Multiply by P | Combine scoops into standard coords |
+| Standard → New | Multiply by P⁻¹ | Decompose into new basis |
+
+# Finding P⁻¹ (2×2)
+For P = [[a,b],[c,d]]:
+
+P⁻¹ = (1 / (ad-bc)) · [[d,-b],[-c,a]]
+
+
+# Applying a Transformation in a New Basis
+
+A_new = P⁻¹ · A · P
+
+Read right to left:
+1. P — convert from new basis to standard
+2. A — apply transformation
+3. P⁻¹ — convert back to new basis
+
+
+ 6. Connection to Diagonalization
+
+Diagonalization is change of basis in reverse — you start with a messy matrix and find the right basis (eigenvectors) that makes it clean (diagonal).
+
+
+A = P · D · P⁻¹
+
+
+Where:
+- P = matrix of eigenvectors (the smart basis)
+- D = diagonal matrix of eigenvalues (the clean stretch amounts)
+
+Why it matters:
+- Computing A¹⁰⁰ becomes trivial (just raise diagonal entries to the power)
+- Decouples equations in engineering simulations
+- Foundation of PCA in machine learning
+- Core of signal processing (Fourier Transform)
+
+
+ Summary of the Logic Chain
+
+
+Vectors
+  → Scale them (scoops)
+    → Add them (linear combinations)
+      → They span a shape (line, plane, R³)
+        → Change the rulers (change of basis)
+          → Find the perfect rulers (diagonalization)
+
+
+
+*Next topic: Eigenvalues and Eigenvectors*
