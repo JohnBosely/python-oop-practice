@@ -450,3 +450,82 @@ print(M5 @ v2)                # → [4, 1]  (changes direction)
 # Quick NumPy verification style (optional – we focused on manual)
 # eigenvalues, eigenvectors = np.linalg.eig(matrix)
 # But today's emphasis was hand calculation
+
+#2/18/26
+import numpy as np
+
+# ============================================================
+# SECTION 1: Change of Basis Setup
+# ============================================================
+
+def build_P(b1, b2):
+    # Columns are the new basis vectors
+    return np.array([[b1[0], b2[0]],
+                     [b1[1], b2[1]]], dtype=float)
+
+b1 = np.array([2, 1])
+b2 = np.array([0, 1])
+
+P    = build_P(b1, b2)
+Pinv = np.linalg.inv(P)
+
+print("=== Change of Basis ===")
+print("b1 =", b1, "| b2 =", b2)
+print("P =\n", P)
+print("P⁻¹ =\n", Pinv)
+
+
+# ============================================================
+# SECTION 2: New Coordinates → Standard
+# ============================================================
+
+new_coords     = np.array([3, 2])
+standard_coords = P @ new_coords
+
+print("\n=== New → Standard ===")
+print("New coords     :", new_coords)
+print("Standard coords:", standard_coords)   # [6, 5]
+
+
+# ============================================================
+# SECTION 3: Standard Coordinates → New
+# ============================================================
+
+back_to_new = Pinv @ standard_coords
+
+print("\n=== Standard → New ===")
+print("Standard coords:", standard_coords)
+print("Back to new    :", back_to_new)        # [3, 2]
+
+
+# ============================================================
+# SECTION 4: Sandwich Formula — A_new = P⁻¹ A P
+# ============================================================
+
+P2    = build_P(np.array([1, 1]), np.array([1, -1]))
+P2inv = np.linalg.inv(P2)
+
+A     = np.array([[2, 0],
+                  [0, 4]], dtype=float)
+
+A_new = P2inv @ A @ P2
+
+print("\n=== Sandwich Formula A_new = P⁻¹AP ===")
+print("Basis: b1=(1,1), b2=(1,-1)")
+print("A =\n", A)
+print("A_new =\n", A_new)
+
+
+# ============================================================
+# SECTION 5: Round Trip Verification
+# ============================================================
+
+# Whatever you do in the new basis, you can always come back
+test_point      = np.array([5, 3])
+in_new_basis    = Pinv @ test_point
+back_to_standard = P @ in_new_basis
+
+print("\n=== Round Trip Check ===")
+print("Start (standard) :", test_point)
+print("In new basis     :", in_new_basis)
+print("Back to standard :", back_to_standard)   # should match start
