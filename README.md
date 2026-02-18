@@ -774,5 +774,3 @@ Vectors
           → Find the perfect rulers (diagonalization)
 
 
-
-*Next topic: Eigenvalues and Eigenvectors*
