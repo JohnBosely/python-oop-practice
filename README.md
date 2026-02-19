@@ -774,4 +774,4 @@ Vectors
           → Find the perfect rulers (diagonalization)
 
 wasnt able to do anything 
-WASNT FEELING WELL TODAY
+
