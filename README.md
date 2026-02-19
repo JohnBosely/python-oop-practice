@@ -773,4 +773,4 @@ Vectors
         → Change the rulers (change of basis)
           → Find the perfect rulers (diagonalization)
 
-wasnt able to do anything today
+wasnt able to do anything 
