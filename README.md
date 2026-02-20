@@ -822,5 +822,12 @@ Focus: Consolidation of core concepts + visual intuition for symmetry and SVD pr
 
 ## Next (next 2 days – coding & implementation heavy)
 
+- Implement matrix multiplication from scratch (triple loop → vectorized)  
+- Build transformation visualizer (unit circle/grid + eigenvectors/arrows)  
+- Apply SVD on various matrices + reconstruct + low-rank approximation  
+- Plot full SVD pipeline (Vᵀ → Σ → U)  
+- Choose one mini-project (image compression or PCA demo)  
+
+
 
 
