@@ -828,6 +828,6 @@ Focus: Consolidation of core concepts + visual intuition for symmetry and SVD pr
 - Plot full SVD pipeline (Vᵀ → Σ → U)  
 - Choose one mini-project (image compression or PCA demo)  
 
-
+Session ended with confirmation that the symmetry → perpendicular eigenvectors connection is now clear.
 
 
