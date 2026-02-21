@@ -882,6 +882,6 @@ Day 2 – SVD in action
   - Image compression: grayscale image → SVD → keep top 20–50 singular values → compare original vs approx
   - Toy PCA: small high-D dataset → center → SVD → project to 2D → plot
 
-DDDDD
+
 
 
