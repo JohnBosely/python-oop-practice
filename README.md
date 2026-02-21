@@ -829,5 +829,5 @@ Focus: Consolidation of core concepts + visual intuition for symmetry and SVD pr
 - Choose one mini-project (image compression or PCA demo)  
 
 
-
+21/2/2026 MORNING SESSION
 
