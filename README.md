@@ -830,4 +830,58 @@ Focus: Consolidation of core concepts + visual intuition for symmetry and SVD pr
 
 
 21/2/2026 MORNING SESSION
+# Linear Algebra Deep Dive – February 21, 2026  
+Focus: Final consolidation of linear algebra concepts + transition to coding sprint
+
+## What we covered today
+
+- Reviewed and reinforced understanding after a short break (due to sickness)
+- Went through user answers to confidence-building questions (1–14) on:
+  - Vectors & matrix shapes (1D vs 2D representation)
+  - Dot product = 0 meaning perpendicular (with real-world examples like principle of moments)
+  - Matrix multiplication as row · column dot products
+  - Broadcasting mechanics ("ghost numbers" repeating to match shapes, right-alignment rule)
+  - Rank as number of independent directions (redundancy → lower rank, collapse to line/plane)
+  - Determinant = signed volume scaling (0 → collapse → not invertible)
+  - Eigenvectors as special directions that only scale (no rotation/shear)
+  - Symmetric matrices forcing perpendicular eigenvectors (90° ellipse axes)
+  - Non-diagonalizable cases (shear with repeated eigenvalue + deficient eigenspace)
+  - SVD geometry (rotate → perpendicular stretch → rotate back)
+  - Low-rank SVD for compression / dimension reduction (keep top singular values → erase noise/weak directions)
+- Confirmed strong visual intuition:
+  - Diagonalizable → shear can be rotated away → clean stretch in new basis
+  - Non-diagonalizable → persistent shear/sliding that survives any rotation
+  - Symmetric → always perpendicular principal axes in transformed ellipse
+  - SVD → forces perpendicular stretch even for messy/non-square matrices
+- Decided next step: close the linear algebra chapter with a **2-day coding sprint** focused on implementation and visualization (no more hand calculations)
+
+## Key takeaways & confidence checkpoints
+
+- Comfortable explaining why symmetry → perpendicular eigenvectors (reciprocity property)
+- Can visualize rank deficiency (collapse to line/plane/point)
+- Understand det = 0 → irreversible collapse
+- Recognize non-diagonalizable = baked-in shear/chain dependency
+- SVD seen as generalized eigendecomposition: rotate → scale along perpendicular axes → rotate
+- Ready to implement and see everything in code/plots
+
+## Next: 2-Day Coding Sprint (to close linear algebra)
+
+Day 1 – Core implementations & transformation visuals
+- Matrix multiplication from scratch (triple loop → vectorized comparison)
+- Transformation visualizer:
+  - Unit circle + grid of points
+  - Apply scaling, rotation, shear, reflection, projection, rank-1 matrices
+  - Overlay eigenvectors (quiver arrows) when they exist
+
+Day 2 – SVD in action
+- SVD playground:
+  - np.linalg.svd on various matrices (square, rectangular, low-rank + noise)
+  - Reconstruct with all vs top-k components
+  - Plot rotate → stretch → rotate pipeline
+- Mini-project (choose one):
+  - Image compression: grayscale image → SVD → keep top 20–50 singular values → compare original vs approx
+  - Toy PCA: small high-D dataset → center → SVD → project to 2D → plot
+
+Goal: Produce tangible outputs (notebook with plots, compressed image demo) that show ownership of concepts.
+
 
