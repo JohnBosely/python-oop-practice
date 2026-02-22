@@ -634,3 +634,56 @@ def plot_transformation(A, title="Transformation"):
     ax2.legend()
     plt.tight_layout()
     plt.show()
+
+    import numpy as np
+import matplotlib.pyplot as plt
+
+A = np.array([[4, 1],
+              [1, 3]])
+
+U, S, Vt = np.linalg.svd(A, full_matrices=True)
+
+print("U:\n", np.round(U, 3))
+print("\nSingular values:\n", np.round(S, 3))
+print("\nVt:\n", np.round(Vt, 3))
+
+Sigma = np.zeros((U.shape[1], Vt.shape[0]))
+Sigma[:len(S), :len(S)] = np.diag(S)
+reconstructed = U @ Sigma @ Vt
+print("\nReconstructed:\n", np.round(reconstructed, 3))
+
+k = 1
+U_k = U[:, :k]
+Sigma_k = np.diag(S[:k])
+Vt_k = Vt[:k, :]
+low_rank = U_k @ Sigma_k @ Vt_k
+print("\nLow-rank (k=1):\n", np.round(low_rank, 3))
+
+theta = np.linspace(0, 2*np.pi, 100)
+circle = np.vstack([np.cos(theta), np.sin(theta)])
+
+after_Vt = Vt @ circle
+Sigma_full = np.zeros((2, 2))
+Sigma_full[:len(S), :len(S)] = np.diag(S)
+after_Sigma = Sigma_full @ after_Vt
+after_U = U @ after_Sigma
+
+fig, axs = plt.subplots(1, 4, figsize=(16, 4), sharex=True, sharey=True)
+
+stages = [
+    (circle, 'Original circle', 'blue'),
+    (after_Vt, 'After Vᵀ', 'orange'),
+    (after_Sigma, 'After Σ', 'green'),
+    (after_U, 'After U', 'red')
+]
+
+for ax, (pts, lbl, color) in zip(axs, stages):
+    ax.plot(pts[0], pts[1], color=color, lw=1.5)
+    ax.set_title(lbl)
+    ax.set_aspect('equal')
+    ax.grid(True, alpha=0.3)
+    ax.axhline(0, color='gray', lw=0.5)
+    ax.axvline(0, color='gray', lw=0.5)
+
+plt.tight_layout()
+plt.show()
