@@ -883,5 +883,58 @@ Day 2 – SVD in action
   - Toy PCA: small high-D dataset → center → SVD → project to 2D → plot
 
 
+# Linear Algebra Deep Dive – February 22, 2026  
+Focus: Hands-on coding sprint to close the linear algebra chapter + SVD visualization mastery
+
+## What we accomplished today
+
+- Completed Day 1 of the 2-day coding sprint  
+- Implemented matrix multiplication from scratch (triple-loop version)  
+  - Wrote, debugged, and fixed the function step-by-step  
+  - Verified it matches NumPy `@` operator on multiple test cases (2×3 × 3×2, square matrices, etc.)  
+  - Understood why manual loops are slow (compared to NumPy's optimized BLAS backend)  
+- Built and experimented with a transformation visualizer  
+  - Unit circle + grid of points before/after transformation  
+  - Applied and explored scaling, rotation, shear, reflection, projection, rank-1 matrices  
+  - Overlaid eigenvectors (green quiver arrows) to see fixed directions  
+  - Observed how different matrices affect shape, direction, length, area, and rank  
+- Gained deep visual intuition through experimentation:  
+  - Scaling → axis-aligned ellipse  
+  - Rotation → circle stays circle, just rotated  
+  - Shear → tilted parallelogram (persistent shear)  
+  - Reflection → mirrored circle  
+  - Projection → collapse to line (rank 1, area → 0)  
+- Previewed Day 2 with SVD pipeline visualization  
+  - Computed SVD on symmetric matrix  
+  - Saw full rotate (Vᵀ) → perpendicular stretch (Σ) → rotate (U) pipeline  
+  - Reconstructed original matrix and low-rank approximation  
+  - Confirmed SVD forces perpendicular stretch even for non-symmetric cases  
+
+## Key visual & conceptual takeaways
+
+- Matrix multiplication = nested dot products (row of A • column of B)  
+- Transformations: circle → ellipse/line/point reveals scaling, rotation, shear, rank collapse  
+- Eigenvectors = directions that only stretch/shrink (green arrows stay aligned)  
+- Symmetric matrices → always perpendicular eigenvectors → ellipse with 90° axes  
+- Non-diagonalizable (shear) → persistent distortion that can't be rotated away  
+- SVD = "rotate input → perpendicular stretch → rotate output" for any matrix  
+- Singular values ≥ 0 → pure stretch magnitudes (no flips), zeros erase dimensions  
+- Low-rank approx → keep top singular values → capture main structure, discard noise  
+
+## Current confidence level
+
+- Can implement basic matrix ops from scratch  
+- Deep visual understanding of linear transformations (scaling, rotation, shear, projection, rank effects)  
+- Clear grasp of SVD geometry and why it generalizes eigendecomposition  
+- Ready for Day 2: full SVD playground + mini-project (image compression or toy PCA)
+
+## Next (Day 2 – SVD in action)
+
+- SVD playground: experiment with square/rectangular/low-rank matrices  
+- Reconstruct with all vs top-k components → plot error vs k  
+- Visualize full SVD pipeline on unit circle/grid  
+- Mini-project:  
+  - Image compression (grayscale image → SVD → top 20–50 singular values → compare)  
+  - Toy PCA (small high-D dataset → center → SVD → 2D projection plot)
 
 
