@@ -529,3 +529,41 @@ print("\n=== Round Trip Check ===")
 print("Start (standard) :", test_point)
 print("In new basis     :", in_new_basis)
 print("Back to standard :", back_to_standard)   # should match start
+
+
+#2/22/26 SVD PRACTICE AND VISUALIZATION
+import numpy as np
+
+def matmul(A, B):
+    """
+    Manual matrix multiplication: C = A @ B using triple loop.
+    """
+    m, p1 = A.shape
+    p2, n = B.shape
+    
+    if p1 != p2:
+        raise ValueError(f'These matrices cannot be multiplied, p1 is not equal to p2')
+    
+    C = np.zeros((m, n))
+    
+    for i in range(m):
+        for j in range(n):
+            for k in range(p1):
+                C[i, j] += A[i, k] * B[k, j]
+    
+    return C
+
+
+# Test case
+A = np.array([[1, 2, 3],
+              [4, 5, 6]])  # 2×3
+
+B = np.array([[7, 8],
+              [9, 10],
+              [11, 12]])   # 3×2
+
+print("A @ B (manual):")
+print(matmul(A, B))
+
+print("NumPy @:")
+print(A @ B)
