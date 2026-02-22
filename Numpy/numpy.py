@@ -686,4 +686,3 @@ for ax, (pts, lbl, color) in zip(axs, stages):
     ax.axvline(0, color='gray', lw=0.5)
 
 plt.tight_layout()
-plt.show()
