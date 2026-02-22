@@ -567,3 +567,70 @@ print(matmul(A, B))
 
 print("NumPy @:")
 print(A @ B)
+
+#TRANSFORMATION VISUALIZER
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_transformation(A, title="Transformation"):
+    """
+    Visualize how matrix A transforms the unit circle and a grid.
+    Overlays eigenvectors if they exist and are real.
+    """
+    # Unit circle
+    theta = np.linspace(0, 2*np.pi, 100)
+    circle = np.vstack([np.cos(theta), np.sin(theta)])
+
+    # Grid of points
+    x = np.linspace(-1.5, 1.5, 15)
+    y = np.linspace(-1.5, 1.5, 15)
+    X, Y = np.meshgrid(x, y)
+    grid = np.vstack([X.ravel(), Y.ravel()])
+
+    # Apply transformation
+    circle_transformed = A @ circle
+    grid_transformed   = A @ grid
+
+    # Eigenvectors
+    try:
+        eigenvalues, eigenvectors = np.linalg.eig(A)
+        real_mask = np.isreal(eigenvalues)
+        real_eigvals = eigenvalues[real_mask].real
+        real_eigvecs = eigenvectors[:, real_mask].real
+        norms = np.linalg.norm(real_eigvecs, axis=0)
+        real_eigvecs = real_eigvecs / (norms + 1e-10)
+    except:
+        real_eigvecs = np.empty((2, 0))
+
+    # Plot
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6), sharex=True, sharey=True)
+
+    ax1.plot(circle[0], circle[1], 'b-', lw=1.5, label='Unit circle')
+    ax1.scatter(grid[0], grid[1], s=10, color='lightblue', alpha=0.6)
+    ax1.set_title("Before (original)")
+    ax1.set_aspect('equal')
+    ax1.grid(True, alpha=0.3)
+    ax1.axhline(0, color='gray', lw=0.5)
+    ax1.axvline(0, color='gray', lw=0.5)
+
+    ax2.plot(circle_transformed[0], circle_transformed[1], 'r-', lw=1.5, label='Transformed')
+    ax2.scatter(grid_transformed[0], grid_transformed[1], s=10, color='salmon', alpha=0.6)
+    ax2.set_title(f"After {title}")
+    ax2.set_aspect('equal')
+    ax2.grid(True, alpha=0.3)
+    ax2.axhline(0, color='gray', lw=0.5)
+    ax2.axvline(0, color='gray', lw=0.5)
+
+    if real_eigvecs.shape[1] > 0:
+        for idx in range(real_eigvecs.shape[1]):
+            vec = real_eigvecs[:, idx]
+            scale = 1.2
+            ax1.quiver(0, 0, vec[0]*scale, vec[1]*scale,
+                       color='green', scale_units='xy', scale=1, width=0.008)
+            ax2.quiver(0, 0, vec[0]*scale, vec[1]*scale,
+                       color='green', scale_units='xy', scale=1, width=0.008)
+
+    ax1.legend()
+    ax2.legend()
+    plt.tight_layout()
+    plt.show()
