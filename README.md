@@ -938,3 +938,5 @@ Focus: Hands-on coding sprint to close the linear algebra chapter + SVD visualiz
   - Toy PCA (small high-D dataset → center → SVD → 2D projection plot)
 
 
+
+kkkkk
