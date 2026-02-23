@@ -939,4 +939,4 @@ Focus: Hands-on coding sprint to close the linear algebra chapter + SVD visualiz
 
 
 
-kkkkk
+kkkkkLLLLLL
