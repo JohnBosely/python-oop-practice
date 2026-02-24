@@ -1116,6 +1116,8 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 | Bayes' Theorem | **Naive Bayes classifier** |
 | Mean as baseline guess | **Null model / baseline prediction** |
 
+## What's Next — Stage 3
+
 
 
 
