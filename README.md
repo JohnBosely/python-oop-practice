@@ -669,7 +669,7 @@ Since no single k works, they are independent.
 
 Key Rule:
 | Vectors | Result |
-|---------|--------|
+||--|
 | 1 independent vector | A Line |
 | 2 independent vectors | A Plane |
 | 3 independent vectors | All of R³ |
@@ -724,7 +724,7 @@ P = | 2  0 |
 
 # Two Directions
 | Direction | Operation | Meaning |
-|-----------|-----------|---------|
+|--|--||
 | New → Standard | Multiply by P | Combine scoops into standard coords |
 | Standard → New | Multiply by P⁻¹ | Decompose into new basis |
 
@@ -936,6 +936,186 @@ Focus: Hands-on coding sprint to close the linear algebra chapter + SVD visualiz
 - Mini-project:  
   - Image compression (grayscale image → SVD → top 20–50 singular values → compare)  
   - Toy PCA (small high-D dataset → center → SVD → 2D projection plot)
+
+
+
+DAY 23 AND 24
+# Probability & Statistics for ML Engineering
+### Study Notes — Session 1
+
+
+Stage 1 — Descriptive Statistics
+
+Mean
+The mean is the fair share number — if everyone in a group had equal amounts, what would that amount be?
+
+Formula:
+$$\text{Mean} = \frac{\sum \text{values}}{n}$$
+
+Example: Study hours: 3, 5, 7, 2, 8
+$$\frac{3+5+7+2+8}{5} = 5$$
+
+Key insight: Outliers drag the mean away from reality. If one person studied 100 hours, the mean jumps to 23.4 — no longer representative of the group. In these cases the **median** (middle value when sorted) is more reliable.
+
+
+
+### Variance
+Variance measures **how spread out values are from the mean**. It squares the distances to eliminate negative cancellation.
+
+Steps:
+1. Find the mean
+2. Subtract mean from each value (distance)
+3. Square each distance
+4. Average the squared distances
+
+Example: Study hours: 3, 5, 7, 2, 8 → Mean = 5
+
+| Value | Distance | Squared |
+| 3 | -2 | 4 |
+| 5 | 0 | 0 |
+| 7 | 2 | 4 |
+| 2 | -3 | 9 |
+| 8 | 3 | 9 |
+
+$$\text{Variance} = \frac{4+0+4+9+9}{5} = 5.2$$
+
+Problem: Units are squared (e.g. "hours²") — not human readable.
+
+
+
+### Standard Deviation
+Standard deviation is the square root of variance — it brings the units back to the original scale.
+
+$$\text{Std Dev} = \sqrt{\text{Variance}} = \sqrt{5.2} \approx 2.28 \text{ hours}$$
+
+This means on average, each person studied about 2.28 hours away from the mean of 5.
+
+Outlier detection rule: Any value more than 2 standard deviations from the mean is considered an outlier.
+
+$$\text{Outlier if: } |value - mean| > 2 \times \text{std dev}$$
+
+In Python:
+import numpy as np
+
+data = [3, 5, 7, 2, 8]
+print(np.mean(data))   # Mean
+print(np.var(data))    # Variance
+print(np.std(data))    # Standard Deviation
+
+
+
+
+### Effect of Outliers
+
+| | No Outlier (2–10) | With Outlier (60) |
+||||
+| Mean | 6 | 15 |
+| Variance | 8 | 411 |
+| Std Dev | 2.82 | 20.28 |
+
+One outlier can triple the mean and multiply variance by 50x — always check for outliers before training a model.
+
+Important exception: In fraud detection, the outlier IS the signal. Never blindly remove outliers — understand what they represent first.
+
+
+
+## Stage 2 — Probability
+
+### Conditional Probability
+The probability of an event given another event has already occurred.
+
+$$P(A | B) = \text{"Probability of A given B"}$$
+
+Example: The probability a test correctly identifies a sick person = 95%. This is conditional — it only applies to the sick group.
+
+
+
+### Bayes' Theorem
+How to update a probability when new evidence arrives.
+
+The intuitive approach (no formula needed):
+
+1. Start with the base rate (how common is the thing?)
+2. Apply detection rates to each group separately
+3. Find total flagged
+4. Divide true positives by total flagged
+
+Classic example — Fraud Detection:
+
+Only 2% of transactions are fraudulent. AI flags fraud 98% of the time, incorrectly flags legitimate transactions 3% of the time.
+
+Using 10,000 transactions:
+
+| Group | Count | Flagged |
+| Fraudulent (2%) | 200 | 196 (98%) |
+| Legitimate (98%) | 9,800 | 294 (3%) |
+
+$$P(\text{Fraud} | \text{Flagged}) = \frac{196}{490} \approx 40\%$$
+
+Despite a 98% detection rate, only 40% of flags are real fraud — because legitimate transactions vastly outnumber fraudulent ones.
+
+Key lesson: The base rate dominates. A highly accurate model on a rare event still produces mostly false positives.
+
+
+
+### Base Rate Effect
+
+| Scenario | Base Rate | P(Positive \| Flagged) |
+||||
+| Disease | 1% | 19.3% |
+| Doping | 2% | 66.9% |
+| Spam | 15% | 89.5% |
+
+The higher the base rate, the more trustworthy a positive flag. More real cases = fewer false alarms drowning out the signal.
+
+
+
+### Marginal Probability
+The probability of one event happening regardless of anything else — the base rate before any test is applied.
+
+Example: P(Fraud) = 2% — regardless of transaction amount, location, or anything else.
+
+You've been using marginal probability all day every time you referenced the base rate.
+
+
+
+### Joint Probability
+The probability of two things happening at the same time.
+
+If events are independent:
+$$P(A \text{ AND } B) = P(A) \times P(B)$$
+
+If events are dependent (correlated):
+$$P(A \text{ AND } B) = P(A) \times P(B | A)$$
+
+Example: P(Fraud) = 0.02, P(Over $1000) = 0.05
+$$P(\text{Fraud AND Over \$1000}) = 0.02 \times 0.05 = 0.001 \text{ (if independent)}$$
+
+But fraud and transaction amount are correlated — so the conditional version must be used.
+
+
+
+### Independence vs Correlation
+
+Independent events: Knowing one event happened tells you nothing about the other.
+
+Correlated events: Knowing one event happened changes the probability of the other.
+
+Example: Rain and season are correlated — knowing it's rainy season increases the probability of rain. But rain can still occur in dry season; it's just less likely.
+
+Why it matters in ML: Many algorithms (like Naive Bayes) assume features are independent. Feeding correlated features into these models can produce poor predictions.
+
+
+
+## Key Connections
+
+| Today's Concept | ML Equivalent |
+| True positives / Total flagged | **Precision** |
+| Base rate | **Class imbalance** |
+| Outlier detection (2 std devs) | **Anomaly detection** |
+| Bayes' Theorem | **Naive Bayes classifier** |
+| Mean as baseline guess | **Null model / baseline prediction** |
+
 
 
 
