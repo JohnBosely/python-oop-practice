@@ -1117,7 +1117,7 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 | Mean as baseline guess | **Null model / baseline prediction** |
 
 ## What's Next — Stage 3
-Probability Distributions: Normal (bell curve), Binomial, Poisson — describing how data spreads across all possibilities.
+
 
 
 
