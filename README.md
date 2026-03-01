@@ -1117,7 +1117,7 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 | Mean as baseline guess | **Null model / baseline prediction** |
 
 
-# Probability for ML Engineers (HAD TO MAKE THIS COS I HAD SO MANY ISSUES FOR 4 DAYS, I HAD NO ACCESS TO MY PC)
+# Probability for ML Engineers 
 > A complete study guide covering all core probability concepts needed for machine learning — built from first principles with intuition-first explanations.
 
 
