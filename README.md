@@ -1137,7 +1137,6 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 13. [Quick Reference — All Formulas](#13-quick-reference--all-formulas)
 14. [How These Connect to ML in Practice](#14-how-these-connect-to-ml-in-practice)
 
----
 
 ## 1. Bernoulli Distribution
 
@@ -1148,10 +1147,10 @@ The simplest distribution. One trial, two outcomes: **success or failure**.
 What is the probability of success or failure in a single trial?
 
 ### Formula
-```
+
 P(X = 1) = p          ← probability of success
 P(X = 0) = 1 - p      ← probability of failure
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1165,7 +1164,6 @@ Every yes/no question in ML is Bernoulli at its core. Will this customer churn? 
 ### ML Use
 Foundation of all binary classification. Logistic regression is built on top of Bernoulli probability.
 
----
 
 ## 2. Binomial Distribution
 
@@ -1176,9 +1174,9 @@ Repeat a Bernoulli trial `n` times. Ask: what is the probability of getting exac
 If I repeat something `n` times, each with probability `p` of success, what is the probability I get exactly `k` successes?
 
 ### Formula
-```
+
 P(X = k) = C(n, k) * p^k * (1-p)^(n-k)
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1191,11 +1189,11 @@ P(X = k) = C(n, k) * p^k * (1-p)^(n-k)
 | `(1-p)^(n-k)` | probability of the failures |
 
 ### How to calculate C(n, k)
-```
+
 C(n, k) = n! / (k! * (n-k)!)
 
 Example: C(4, 2) = 4! / (2! * 2!) = 24 / 4 = 6
-```
+
 `n!` means `n * (n-1) * (n-2) * ... * 1`. So `4! = 4 * 3 * 2 * 1 = 24`.
 
 ### Worked Example
@@ -1214,7 +1212,7 @@ The formula answers two questions and multiplies them:
 ### ML Use
 Binary classification, A/B testing, quality control, any repeated yes/no process.
 
----
+
 
 ## 3. Poisson Distribution
 
@@ -1225,9 +1223,9 @@ Like Binomial but for a **fixed window of time or space** instead of fixed trial
 Given that something happens on average `λ` times in a window, what is the probability it happens exactly `k` times?
 
 ### Formula
-```
+
 P(X = k) = (λ^k * e^-λ) / k!
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1258,14 +1256,12 @@ Poisson is just Binomial pushed to infinity. If you break an hour into infinitel
 ### ML Use
 Fraud detection (transactions per day), server crashes (per month), click rates (per hour), any count-based prediction.
 
----
 
 ## 4. PMF, PDF, and CDF
 
 ### The core question they all answer
 How is probability spread across possible outcomes?
 
----
 
 ### PMF — Probability Mass Function
 
@@ -1277,7 +1273,6 @@ How is probability spread across possible outcomes?
 
 **Example:** P(exactly 3 heads in 5 flips) — this is a PMF calculation
 
----
 
 ### PDF — Probability Density Function
 
@@ -1291,7 +1286,6 @@ How is probability spread across possible outcomes?
 
 **Connection you already know:** The 68-95-99.7 rule is about the area under the PDF curve between standard deviation boundaries.
 
----
 
 ### CDF — Cumulative Distribution Function
 
@@ -1305,7 +1299,6 @@ How is probability spread across possible outcomes?
 
 **ML Use:** Model evaluation thresholds, fraud score cutoffs, session time analysis, "within X days" questions
 
----
 
 ### Summary Table
 
@@ -1315,7 +1308,6 @@ How is probability spread across possible outcomes?
 | PDF | Continuous | P(within this range) | Smooth curve |
 | CDF | Both | P(up to this value) | Rising curve, 0 to 1 |
 
----
 
 ## 5. Conditional Probability
 
@@ -1326,9 +1318,9 @@ The probability of something happening **given that something else has already h
 How does knowing one thing change the probability of another?
 
 ### Formula
-```
+
 P(A | B) = P(A and B) / P(B)
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1359,7 +1351,6 @@ The extra information completely changed the probability.
 ### ML Use
 Conditional probability is the foundation of Naive Bayes classifiers and is used constantly in any model that reasons about related features.
 
----
 
 ## 6. Bayes Theorem
 
@@ -1370,9 +1361,9 @@ A formula for **updating a probability when you receive new evidence**.
 Given what I already believed and this new evidence, what should I believe now?
 
 ### Formula
-```
+
 P(A | B) = P(B | A) * P(A) / P(B)
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1385,9 +1376,9 @@ P(A | B) = P(B | A) * P(A) / P(B)
 ### The 3-part intuition
 Bayes is saying: start with what you already believe (prior), see new evidence, update your belief (posterior).
 
-```
+
 New belief = (How likely is this evidence if true?) * (Old belief) / (How common is this evidence overall?)
-```
+
 
 ### Worked Example
 A medical test for a rare disease:
@@ -1397,11 +1388,11 @@ A medical test for a rare disease:
 
 You test positive. What is the actual probability you have the disease?
 
-```
+
 P(B) = P(positive) = (0.99 * 0.01) + (0.05 * 0.99) = 0.0099 + 0.0495 = 0.0594
 
 P(disease | positive) = (0.99 * 0.01) / 0.0594 = 0.0099 / 0.0594 ≈ 0.167 = 16.7%
-```
+
 
 Even with a 99% accurate test, a positive result only means 16.7% chance of having the disease — because the disease is so rare. This is the power of Bayes: it forces you to account for prior probability.
 
@@ -1414,7 +1405,6 @@ The rarer something is (low prior), the more evidence you need before being conf
 - **Any model that updates beliefs with new data**
 - Foundational to Bayesian machine learning and probabilistic programming
 
----
 
 ## 7. Maximum Likelihood Estimation (MLE)
 
@@ -1425,9 +1415,9 @@ A method for finding the parameter value that makes your observed data most prob
 Given my data, which parameter value makes that data most likely to have occurred?
 
 ### Concept
-```
+
 Find p that maximizes: P(data | p)
-```
+
 
 ### Intuition
 You flip a coin 10 times and get 7 heads. You do not know if the coin is fair. MLE asks: *what value of p would make getting 7 heads most likely?*
@@ -1452,7 +1442,6 @@ We use whatever distribution fits the data. Coin flips → Binomial. Arrivals pe
 ### ML Use
 **Model training IS MLE.** When you call `model.fit()`, the model is finding parameter values that maximize the likelihood of your training data. Cross-entropy loss, log loss, and MSE are all MLE in disguise.
 
----
 
 ## 8. Confidence Intervals
 
@@ -1463,9 +1452,9 @@ A range that the true answer probably falls within, given your sample.
 Given my sample, what range does the true answer probably lie in?
 
 ### Formula
-```
+
 mean ± z * (std_dev / sqrt(n))
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1495,7 +1484,6 @@ The confidence level (90%, 95%, 99%) is **your choice**. But the width of the ra
 ### ML Use
 Evaluating model accuracy, A/B testing new models, reporting results to stakeholders, knowing whether to trust your numbers.
 
----
 
 ## 9. Hypothesis Testing & P-Values
 
@@ -1516,33 +1504,31 @@ Is this difference real or just luck?
 - You need strong evidence to say "guilty" (reject H0)
 - Weak evidence → stick with "innocent" (fail to reject H0)
 
----
 
 ### P-Values
 
 **What it is:** The probability that your result happened by pure chance.
 
 **The rule:**
-```
+
 p < 0.05  →  Real difference (reject H0)   ✅
 p > 0.05  →  Could be chance (keep H0)     ❌
-```
+
 
 **Example:** New model scores 89% vs old model's 87%.
 - p-value = 0.02 → 0.02 < 0.05 → difference is real → ship the new model
 - p-value = 0.30 → 30% chance this is luck → keep old model
 
 ### In Python
-```python
+python
 from scipy.stats import ttest_ind
 statistic, p_value = ttest_ind(results_old_model, results_new_model)
 print(p_value)  # if below 0.05, the difference is real
-```
+
 
 ### ML Use
 Comparing model versions, validating A/B tests, checking if a new feature actually improves performance, any time you ask "is this improvement real?"
 
----
 
 ## 10. Entropy
 
@@ -1553,9 +1539,9 @@ A measure of uncertainty or unpredictability in a situation.
 How uncertain or surprising is this situation?
 
 ### Formula
-```
+
 H = -Σ p(x) * log2(p(x))
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1566,18 +1552,18 @@ H = -Σ p(x) * log2(p(x))
 
 ### Worked Examples
 **Fair coin (50/50):**
-```
+
 H = -(0.5 * log2(0.5) + 0.5 * log2(0.5))
   = -(0.5 * -1 + 0.5 * -1)
   = -(-1)
   = 1.0   ← high entropy, maximum uncertainty
-```
+
 
 **Biased coin (99/1):**
-```
+
 H = -(0.99 * log2(0.99) + 0.01 * log2(0.01))
   ≈ 0.08  ← low entropy, very predictable
-```
+
 
 ### Where the formula came from
 Claude Shannon (1948) asked: *how do I measure how much information is in a message?*
@@ -1592,7 +1578,6 @@ Information of one event = `-log(p)`. Entropy is just the **average information*
 ### ML Use
 Decision trees split data by finding the feature that **reduces entropy the most** (called information gain). Higher entropy = more impure/mixed node.
 
----
 
 ## 11. Cross-Entropy
 
@@ -1603,9 +1588,9 @@ A measure of how well a predicted distribution matches the true distribution.
 How surprised is my model when it sees the true answer?
 
 ### Formula
-```
+
 H(p, q) = -Σ p(x) * log(q(x))
-```
+
 
 ### Variables
 | Variable | Meaning |
@@ -1621,24 +1606,23 @@ H(p, q) = -Σ p(x) * log(q(x))
 True label: cat (1), dog (0)
 
 Model predicts cat = 0.7:
-```
+
 H = -(1 * log(0.7) + 0 * log(0.3))
   = -(1 * -0.51 + 0)
   = 0.51
-```
+
 
 Model predicts cat = 0.99:
-```
+
 H = -(1 * log(0.99))
   = 0.014   ← much lower, better prediction
-```
+
 
 Lower cross-entropy = model is more confident and correct.
 
 ### ML Use
 **The loss function in neural networks.** When you call `model.fit()`, the model is minimizing cross-entropy. Also appears as "log loss" in logistic regression.
 
----
 
 ## 12. KL Divergence
 
@@ -1649,9 +1633,9 @@ A measure of how much information is lost when using a predicted distribution in
 Exactly how much is my model's understanding diverging from reality?
 
 ### Formula
-```
+
 KL(p || q) = Cross-Entropy(p, q) - Entropy(p)
-```
+
 
 ### Breakdown
 | Part | Meaning |
@@ -1667,7 +1651,6 @@ KL(p || q) = Cross-Entropy(p, q) - Entropy(p)
 ### ML Use
 Variational autoencoders (VAEs), comparing probability distributions, natural language processing, evaluating how far model beliefs are from reality.
 
----
 
 ## 13. Quick Reference — All Formulas
 
@@ -1685,14 +1668,13 @@ Variational autoencoders (VAEs), comparing probability distributions, natural la
 | Cross-Entropy | `-Σ p(x) * log(q(x))` | How good are my predictions? |
 | KL Divergence | `CrossEntropy - Entropy` | How far is my model from truth? |
 
----
 
 ## 14. How These Connect to ML in Practice
 
 ### You will NOT use most of these manually
 You will not sit down and calculate binomial probabilities by hand at work. Libraries handle the computation.
 
-```python
+python
 from scipy.stats import binom, poisson
 import torch.nn as nn
 
