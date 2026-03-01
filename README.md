@@ -1117,7 +1117,7 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 | Mean as baseline guess | **Null model / baseline prediction** |
 
 
-# Probability for ML Engineers 
+# Probability for ML Engineers
 > A complete study guide covering all core probability concepts needed for machine learning — built from first principles with intuition-first explanations.
 
 
@@ -1126,15 +1126,18 @@ Why it matters in ML: Many algorithms (like Naive Bayes) assume features are ind
 2. [Binomial Distribution](#2-binomial-distribution)
 3. [Poisson Distribution](#3-poisson-distribution)
 4. [PMF, PDF, and CDF](#4-pmf-pdf-and-cdf)
-5. [Maximum Likelihood Estimation (MLE)](#5-maximum-likelihood-estimation-mle)
-6. [Confidence Intervals](#6-confidence-intervals)
-7. [Hypothesis Testing & P-Values](#7-hypothesis-testing--p-values)
-8. [Entropy](#8-entropy)
-9. [Cross-Entropy](#9-cross-entropy)
-10. [KL Divergence](#10-kl-divergence)
-11. [Quick Reference — All Formulas](#11-quick-reference--all-formulas)
-12. [How These Connect to ML in Practice](#12-how-these-connect-to-ml-in-practice)
+5. [Conditional Probability](#5-conditional-probability)
+6. [Bayes Theorem](#6-bayes-theorem)
+7. [Maximum Likelihood Estimation (MLE)](#7-maximum-likelihood-estimation-mle)
+8. [Confidence Intervals](#8-confidence-intervals)
+9. [Hypothesis Testing & P-Values](#9-hypothesis-testing--p-values)
+10. [Entropy](#10-entropy)
+11. [Cross-Entropy](#11-cross-entropy)
+12. [KL Divergence](#12-kl-divergence)
+13. [Quick Reference — All Formulas](#13-quick-reference--all-formulas)
+14. [How These Connect to ML in Practice](#14-how-these-connect-to-ml-in-practice)
 
+---
 
 ## 1. Bernoulli Distribution
 
@@ -1162,6 +1165,7 @@ Every yes/no question in ML is Bernoulli at its core. Will this customer churn? 
 ### ML Use
 Foundation of all binary classification. Logistic regression is built on top of Bernoulli probability.
 
+---
 
 ## 2. Binomial Distribution
 
@@ -1210,6 +1214,7 @@ The formula answers two questions and multiplies them:
 ### ML Use
 Binary classification, A/B testing, quality control, any repeated yes/no process.
 
+---
 
 ## 3. Poisson Distribution
 
@@ -1253,12 +1258,14 @@ Poisson is just Binomial pushed to infinity. If you break an hour into infinitel
 ### ML Use
 Fraud detection (transactions per day), server crashes (per month), click rates (per hour), any count-based prediction.
 
+---
 
 ## 4. PMF, PDF, and CDF
 
 ### The core question they all answer
 How is probability spread across possible outcomes?
 
+---
 
 ### PMF — Probability Mass Function
 
@@ -1270,6 +1277,7 @@ How is probability spread across possible outcomes?
 
 **Example:** P(exactly 3 heads in 5 flips) — this is a PMF calculation
 
+---
 
 ### PDF — Probability Density Function
 
@@ -1283,6 +1291,7 @@ How is probability spread across possible outcomes?
 
 **Connection you already know:** The 68-95-99.7 rule is about the area under the PDF curve between standard deviation boundaries.
 
+---
 
 ### CDF — Cumulative Distribution Function
 
@@ -1296,6 +1305,7 @@ How is probability spread across possible outcomes?
 
 **ML Use:** Model evaluation thresholds, fraud score cutoffs, session time analysis, "within X days" questions
 
+---
 
 ### Summary Table
 
@@ -1305,8 +1315,108 @@ How is probability spread across possible outcomes?
 | PDF | Continuous | P(within this range) | Smooth curve |
 | CDF | Both | P(up to this value) | Rising curve, 0 to 1 |
 
+---
 
-## 5. Maximum Likelihood Estimation (MLE)
+## 5. Conditional Probability
+
+### What it is
+The probability of something happening **given that something else has already happened**.
+
+### Core question
+How does knowing one thing change the probability of another?
+
+### Formula
+```
+P(A | B) = P(A and B) / P(B)
+```
+
+### Variables
+| Variable | Meaning |
+|----------|---------|
+| `P(A \| B)` | probability of A given B has occurred |
+| `P(A and B)` | probability of both A and B happening |
+| `P(B)` | probability of B happening |
+
+### Intuition
+Normal probability asks: "what is the chance it rains today?"
+Conditional probability asks: "what is the chance it rains today **given** there are dark clouds?"
+
+Knowing about the clouds changes your estimate. That update is conditional probability.
+
+### Worked Example
+A bag has 3 red and 2 blue balls. You pick one without looking.
+- P(red) = 3/5 = 60%
+
+Now you are told "it is not blue." Given this information:
+- P(red | not blue) = 3/3 = 100%
+
+The extra information completely changed the probability.
+
+### Independent vs Correlated
+- **Independent events:** Knowing one tells you nothing about the other. P(A | B) = P(A). Example: two separate coin flips.
+- **Correlated events:** Knowing one changes the probability of the other. Example: rain and dark clouds.
+
+### ML Use
+Conditional probability is the foundation of Naive Bayes classifiers and is used constantly in any model that reasons about related features.
+
+---
+
+## 6. Bayes Theorem
+
+### What it is
+A formula for **updating a probability when you receive new evidence**.
+
+### Core question
+Given what I already believed and this new evidence, what should I believe now?
+
+### Formula
+```
+P(A | B) = P(B | A) * P(A) / P(B)
+```
+
+### Variables
+| Variable | Meaning |
+|----------|---------|
+| `P(A \| B)` | **Posterior** — updated belief after seeing evidence B |
+| `P(A)` | **Prior** — your belief before seeing any evidence |
+| `P(B \| A)` | **Likelihood** — probability of seeing evidence B if A is true |
+| `P(B)` | **Marginal** — overall probability of seeing evidence B |
+
+### The 3-part intuition
+Bayes is saying: start with what you already believe (prior), see new evidence, update your belief (posterior).
+
+```
+New belief = (How likely is this evidence if true?) * (Old belief) / (How common is this evidence overall?)
+```
+
+### Worked Example
+A medical test for a rare disease:
+- Disease affects 1% of people → **Prior P(disease) = 0.01**
+- Test is 99% accurate → **P(positive | disease) = 0.99**
+- Test has 5% false positive rate → **P(positive | no disease) = 0.05**
+
+You test positive. What is the actual probability you have the disease?
+
+```
+P(B) = P(positive) = (0.99 * 0.01) + (0.05 * 0.99) = 0.0099 + 0.0495 = 0.0594
+
+P(disease | positive) = (0.99 * 0.01) / 0.0594 = 0.0099 / 0.0594 ≈ 0.167 = 16.7%
+```
+
+Even with a 99% accurate test, a positive result only means 16.7% chance of having the disease — because the disease is so rare. This is the power of Bayes: it forces you to account for prior probability.
+
+### Key insight
+The rarer something is (low prior), the more evidence you need before being confident it is true. Bayes formalizes this mathematically.
+
+### ML Use
+- **Naive Bayes classifier** — directly uses Bayes theorem for classification
+- **Spam filters** — P(spam | these words)
+- **Any model that updates beliefs with new data**
+- Foundational to Bayesian machine learning and probabilistic programming
+
+---
+
+## 7. Maximum Likelihood Estimation (MLE)
 
 ### What it is
 A method for finding the parameter value that makes your observed data most probable.
@@ -1342,8 +1452,9 @@ We use whatever distribution fits the data. Coin flips → Binomial. Arrivals pe
 ### ML Use
 **Model training IS MLE.** When you call `model.fit()`, the model is finding parameter values that maximize the likelihood of your training data. Cross-entropy loss, log loss, and MSE are all MLE in disguise.
 
+---
 
-## 6. Confidence Intervals
+## 8. Confidence Intervals
 
 ### What it is
 A range that the true answer probably falls within, given your sample.
@@ -1384,8 +1495,9 @@ The confidence level (90%, 95%, 99%) is **your choice**. But the width of the ra
 ### ML Use
 Evaluating model accuracy, A/B testing new models, reporting results to stakeholders, knowing whether to trust your numbers.
 
+---
 
-## 7. Hypothesis Testing & P-Values
+## 9. Hypothesis Testing & P-Values
 
 ### What it is
 A framework for deciding whether an observed difference is real or just random chance.
@@ -1404,6 +1516,7 @@ Is this difference real or just luck?
 - You need strong evidence to say "guilty" (reject H0)
 - Weak evidence → stick with "innocent" (fail to reject H0)
 
+---
 
 ### P-Values
 
@@ -1429,8 +1542,9 @@ print(p_value)  # if below 0.05, the difference is real
 ### ML Use
 Comparing model versions, validating A/B tests, checking if a new feature actually improves performance, any time you ask "is this improvement real?"
 
+---
 
-## 8. Entropy
+## 10. Entropy
 
 ### What it is
 A measure of uncertainty or unpredictability in a situation.
@@ -1478,8 +1592,9 @@ Information of one event = `-log(p)`. Entropy is just the **average information*
 ### ML Use
 Decision trees split data by finding the feature that **reduces entropy the most** (called information gain). Higher entropy = more impure/mixed node.
 
+---
 
-## 9. Cross-Entropy
+## 11. Cross-Entropy
 
 ### What it is
 A measure of how well a predicted distribution matches the true distribution.
@@ -1523,8 +1638,9 @@ Lower cross-entropy = model is more confident and correct.
 ### ML Use
 **The loss function in neural networks.** When you call `model.fit()`, the model is minimizing cross-entropy. Also appears as "log loss" in logistic regression.
 
+---
 
-## 10. KL Divergence
+## 12. KL Divergence
 
 ### What it is
 A measure of how much information is lost when using a predicted distribution instead of the true one.
@@ -1551,14 +1667,17 @@ KL(p || q) = Cross-Entropy(p, q) - Entropy(p)
 ### ML Use
 Variational autoencoders (VAEs), comparing probability distributions, natural language processing, evaluating how far model beliefs are from reality.
 
+---
 
-## 11. Quick Reference — All Formulas
+## 13. Quick Reference — All Formulas
 
 | Concept | Formula | What it answers |
 |---------|---------|-----------------|
 | Bernoulli | `P(X=1) = p` | Probability of one success/failure |
 | Binomial | `C(n,k) * p^k * (1-p)^(n-k)` | k successes in n trials |
 | Poisson | `(λ^k * e^-λ) / k!` | k events in a time window |
+| Conditional Probability | `P(A\|B) = P(A and B) / P(B)` | Probability given known evidence |
+| Bayes Theorem | `P(A\|B) = P(B\|A) * P(A) / P(B)` | Updated belief after new evidence |
 | MLE | `argmax P(data \| p)` | Best parameter for observed data |
 | Confidence Interval | `mean ± z * (std/sqrt(n))` | Range the true value falls in |
 | P-Value Rule | `p < 0.05 = real` | Is this difference chance or real? |
@@ -1566,8 +1685,9 @@ Variational autoencoders (VAEs), comparing probability distributions, natural la
 | Cross-Entropy | `-Σ p(x) * log(q(x))` | How good are my predictions? |
 | KL Divergence | `CrossEntropy - Entropy` | How far is my model from truth? |
 
+---
 
-## 12. How These Connect to ML in Practice
+## 14. How These Connect to ML in Practice
 
 ### You will NOT use most of these manually
 You will not sit down and calculate binomial probabilities by hand at work. Libraries handle the computation.
@@ -1590,8 +1710,8 @@ kl = nn.KLDivLoss()
 
 # Hypothesis test
 from scipy.stats import ttest_ind
-_, p_value = ttest_ind(model_a_scores, model_b_scores)
-```
+p_value = ttest_ind(model_a_scores, model_b_scores)
+`
 
 ### What you WILL use these for
 
@@ -1599,6 +1719,8 @@ _, p_value = ttest_ind(model_a_scores, model_b_scores)
 |---------|--------------------------|
 | Bernoulli / Binomial | Understanding binary classification models |
 | Poisson | Count-based predictions, anomaly detection |
+| Conditional Probability | Feature relationships, any model reasoning about related inputs |
+| Bayes Theorem | Naive Bayes classifier, spam filters, Bayesian ML |
 | MLE | Every model.fit() call — it is always happening |
 | Confidence Intervals | Reporting model accuracy to stakeholders |
 | Hypothesis Testing | "Is model A actually better than model B?" |
@@ -1615,7 +1737,6 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 A junior ML engineer plugs data into models. A good ML engineer understands **why** a certain model fits a certain problem.
 
 
-*Completed: Days 32-34 of the 11-Month AI Engineer Roadmap*
 
 
 
