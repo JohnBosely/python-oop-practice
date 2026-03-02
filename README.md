@@ -1788,9 +1788,9 @@ You do not actually rotate the line thousands of times manually. The best line i
 
 ## 4. The Line Equation
 
-```
+
 y = ax + b
-```
+
 
 | Variable | Meaning |
 |-||
@@ -1826,9 +1826,9 @@ R² compares two things:
 - **Variance of the mean** — how spread out the data is around the average line (the baseline)
 - **Variance of the fitted line** — how spread out the data is around your model's line
 
-```
+
 R² = 1 - (Sum of Squares of residuals / Sum of Squares of the mean)
-```
+
 
 If your line fits well, the residuals are small, the fraction is small, and R² is close to 1.
 
