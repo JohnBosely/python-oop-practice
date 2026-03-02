@@ -1154,7 +1154,7 @@ P(X = 0) = 1 - p      ← probability of failure
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `p` | probability of success |
 | `1 - p` | probability of failure |
 
@@ -1180,7 +1180,7 @@ P(X = k) = C(n, k) * p^k * (1-p)^(n-k)
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `n` | number of trials |
 | `k` | number of successes you want |
 | `p` | probability of success on each trial |
@@ -1229,7 +1229,7 @@ P(X = k) = (λ^k * e^-λ) / k!
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `λ` (lambda) | average rate (e.g. 4 customers per hour) |
 | `k` | exact number of events you are asking about |
 | `e` | mathematical constant ≈ 2.718 |
@@ -1303,7 +1303,7 @@ How is probability spread across possible outcomes?
 ### Summary Table
 
 | Tool | Data Type | Question Answered | Shape |
-|------|-----------|-------------------|-------|
+||--|-|-|
 | PMF | Discrete | P(exactly this value) | Vertical bars |
 | PDF | Continuous | P(within this range) | Smooth curve |
 | CDF | Both | P(up to this value) | Rising curve, 0 to 1 |
@@ -1324,7 +1324,7 @@ P(A | B) = P(A and B) / P(B)
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `P(A \| B)` | probability of A given B has occurred |
 | `P(A and B)` | probability of both A and B happening |
 | `P(B)` | probability of B happening |
@@ -1367,7 +1367,7 @@ P(A | B) = P(B | A) * P(A) / P(B)
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `P(A \| B)` | **Posterior** — updated belief after seeing evidence B |
 | `P(A)` | **Prior** — your belief before seeing any evidence |
 | `P(B \| A)` | **Likelihood** — probability of seeing evidence B if A is true |
@@ -1428,7 +1428,7 @@ Your gut says 0.7 — and that is exactly what MLE gives you.
 You try different parameter values and find the one that peaks:
 
 | p value | P(7 heads in 10 flips) |
-|---------|------------------------|
+|||
 | 0.5 | 11.7% |
 | 0.6 | 21.5% |
 | 0.7 | **26.7%** ← peak |
@@ -1458,7 +1458,7 @@ mean ± z * (std_dev / sqrt(n))
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `mean` | your sample average |
 | `z` | confidence level multiplier |
 | `std_dev` | spread of your data |
@@ -1466,7 +1466,7 @@ mean ± z * (std_dev / sqrt(n))
 
 ### Common z values
 | Confidence Level | z value |
-|-----------------|---------|
+|--||
 | 90% | 1.645 |
 | 95% | 1.96 |
 | 99% | 2.576 |
@@ -1545,7 +1545,7 @@ H = -Σ p(x) * log2(p(x))
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `p(x)` | probability of each outcome |
 | `log2` | log base 2 (log2(0.5) = -1, log2(1) = 0) |
 | `-` | flips negative log values to make H positive |
@@ -1594,7 +1594,7 @@ H(p, q) = -Σ p(x) * log(q(x))
 
 ### Variables
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `p(x)` | true distribution (actual labels) |
 | `q(x)` | predicted distribution (model output) |
 
@@ -1639,7 +1639,7 @@ KL(p || q) = Cross-Entropy(p, q) - Entropy(p)
 
 ### Breakdown
 | Part | Meaning |
-|------|---------|
+|||
 | `Entropy(p)` | natural uncertainty in the true data |
 | `Cross-Entropy(p, q)` | total uncertainty including model error |
 | `KL Divergence` | purely the model's error (natural uncertainty removed) |
@@ -1655,7 +1655,7 @@ Variational autoencoders (VAEs), comparing probability distributions, natural la
 ## 13. Quick Reference — All Formulas
 
 | Concept | Formula | What it answers |
-|---------|---------|-----------------|
+|||--|
 | Bernoulli | `P(X=1) = p` | Probability of one success/failure |
 | Binomial | `C(n,k) * p^k * (1-p)^(n-k)` | k successes in n trials |
 | Poisson | `(λ^k * e^-λ) / k!` | k events in a time window |
@@ -1698,7 +1698,7 @@ p_value = ttest_ind(model_a_scores, model_b_scores)
 ### What you WILL use these for
 
 | Concept | When it shows up at work |
-|---------|--------------------------|
+||--|
 | Bernoulli / Binomial | Understanding binary classification models |
 | Poisson | Count-based predictions, anomaly detection |
 | Conditional Probability | Feature relationships, any model reasoning about related inputs |
@@ -1720,7 +1720,7 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 # Linear Regression — Day 35 Notes
 > What I learned from 3Blue1Brown (Gradient Descent) and StatQuest (Linear Regression, R-squared)
 
----
+
 
 ## What I Covered Today
 1. [Cost Function](#1-cost-function)
@@ -1730,7 +1730,7 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 5. [R-Squared](#5-r-squared)
 6. [The 3-Step Process for Linear Regression](#6-the-3-step-process-for-linear-regression)
 
----
+
 
 ## 1. Cost Function
 
@@ -1743,7 +1743,7 @@ A model that makes predictions will never be perfect. The cost function tells yo
 ### Key idea
 The higher the cost, the worse the model. The goal of training is to **minimize the cost function** — find the settings that make the errors as small as possible.
 
----
+
 
 ## 2. Gradient Descent
 
@@ -1761,7 +1761,7 @@ Imagine placing a ball on a hilly surface. The ball naturally rolls downhill and
 ### What it connects to
 The cost function IS the hilly surface. Gradient descent is the ball rolling down it. You cannot have one without the other.
 
----
+
 
 ## 3. Fitting a Line to Data (Least Squares)
 
@@ -1784,7 +1784,7 @@ Given a scatter of data points, how do you find the best line through them?
 ### In practice
 You do not actually rotate the line thousands of times manually. The best line is found through a direct calculation or via `sklearn`. The rotation intuition just explains what the math is optimizing for.
 
----
+
 
 ## 4. The Line Equation
 
@@ -1793,7 +1793,7 @@ y = ax + b
 ```
 
 | Variable | Meaning |
-|----------|---------|
+|-||
 | `y` | the predicted output |
 | `x` | the input feature |
 | `a` | the gradient / slope — when x increases by 1, y increases by a |
@@ -1804,7 +1804,7 @@ y = ax + b
 
 `b` is just the starting point of the line when there is no x yet.
 
----
+
 
 ## 5. R-Squared
 
@@ -1816,7 +1816,7 @@ R² = 0.7 is **not** just slightly better than R² = 0.5. It is actually twice a
 
 ### How to interpret it
 | R² value | Meaning |
-|----------|---------|
+|-||
 | 1.0 | Model perfectly explains all variation |
 | 0.7 | Model explains 70% of the variation in the data |
 | 0.0 | Model is no better than just predicting the mean every time |
@@ -1832,7 +1832,7 @@ R² = 1 - (Sum of Squares of residuals / Sum of Squares of the mean)
 
 If your line fits well, the residuals are small, the fraction is small, and R² is close to 1.
 
----
+
 
 ## 6. The 3-Step Process for Linear Regression
 
@@ -1849,26 +1849,26 @@ Check whether your R² result is statistically significant or could have happene
 - Low p-value (< 0.05) → the relationship is real
 - High p-value → the result might just be random
 
----
+
 
 ## What's Still Coming (Tomorrow)
 - StatQuest: Gradient Descent clearly explained
 - The actual math behind gradient descent
 - Coding linear regression from scratch in NumPy
 
----
+
 
 ## How Today Connects to the Bigger Picture
 
 | Today's concept | Where it shows up in ML |
-|----------------|--------------------------|
+|-|--|
 | Cost function | Every model has one — it is what training minimizes |
 | Gradient descent | How every neural network learns |
 | Least squares | Direct foundation of linear regression |
 | R² | Model evaluation — is this model actually useful? |
 | P-value of R² | Is this result real or just noise? |
 
----
+
 
 *Day 35 of the 11-Month AI Engineer Roadmap*
 *Tomorrow: Gradient descent math + start coding*
