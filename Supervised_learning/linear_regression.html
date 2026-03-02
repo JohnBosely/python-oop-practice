@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3D Linear Regression</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0f1117; color:#e0e0e0; font-family:'Segoe UI',sans-serif; }
+h1 { text-align:center; padding:14px 0 3px; font-size:1.2rem; color:#7dd3fc; }
+.sub { text-align:center; font-size:0.82rem; color:#94a3b8; margin-bottom:8px; }
+.eq { text-align:center; background:#1e293b; border:1px solid #334155; border-radius:8px; width:fit-content; margin:0 auto 10px; padding:7px 20px; font-size:1rem; color:#fbbf24; font-family:monospace; }
+.layout { display:flex; gap:12px; padding:0 12px 12px; flex-wrap:wrap; }
+canvas { border-radius:10px; background:#0f172a; border:1px solid #1e3a5f; cursor:grab; display:block; }
+canvas:active { cursor:grabbing; }
+.panel { flex:1; min-width:250px; display:flex; flex-direction:column; gap:10px; }
+.card { background:#1e293b; border:1px solid #334155; border-radius:10px; padding:12px 14px; }
+.card h3 { font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#64748b; margin-bottom:9px; }
+.sr { display:flex; flex-direction:column; gap:3px; margin-bottom:9px; }
+.sr label { font-size:0.8rem; color:#cbd5e1; display:flex; justify-content:space-between; }
+.sr label span { color:#7dd3fc; font-weight:600; font-family:monospace; }
+input[type=range] { width:100%; accent-color:#3b82f6; }
+.brow { display:flex; gap:7px; flex-wrap:wrap; }
+button { flex:1; padding:7px; border-radius:7px; border:none; cursor:pointer; font-size:0.75rem; font-weight:600; }
+.ba{background:#3b82f6;color:white;}.br{background:#334155;color:#cbd5e1;}.bp{background:#7c3aed;color:white;}
+.srow{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.sv{font-size:1.1rem;font-weight:700;font-family:monospace;}
+.bg{background:#0f172a;border-radius:5px;height:13px;overflow:hidden;margin-top:3px;}
+.bf{height:100%;border-radius:5px;transition:width .3s,background .3s;}
+.tabs{display:flex;border-radius:7px;overflow:hidden;border:1px solid #334155;margin:9px 0 7px;}
+.tab{flex:1;padding:5px;text-align:center;font-size:0.73rem;cursor:pointer;background:#0f172a;color:#64748b;}
+.tab.on{background:#3b82f6;color:white;font-weight:600;}
+.ex{font-size:0.76rem;color:#94a3b8;line-height:1.6;}
+.ex strong{color:#e2e8f0;}
+.lg{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:0.78rem;color:#cbd5e1;}
+</style>
+</head>
+<body>
+<h1>🐭 3D Multiple Linear Regression</h1>
+<div class="sub">Predicting Mouse Body Length from Weight &amp; Tail Length</div>
+<div class="eq">ŷ = 0.1 + 0.7·x<sub>weight</sub> + 0.5·z<sub>tail</sub></div>
+<div class="layout">
+  <div>
+    <canvas id="c" width="470" height="420"></canvas>
+    <div style="text-align:center;font-size:0.7rem;color:#475569;margin-top:4px;">Drag to rotate · Scroll to zoom</div>
+  </div>
+  <div class="panel">
+    <div class="card">
+      <h3>⚙️ Coefficients (tweak the plane)</h3>
+      <div class="sr"><label>Intercept β₀ <span id="v0">0.1</span></label><input type="range" id="s0" min="-2" max="2" step="0.1" value="0.1"></div>
+      <div class="sr"><label>Weight β₁ <span id="v1">0.7</span></label><input type="range" id="s1" min="-2" max="2" step="0.1" value="0.7"></div>
+      <div class="sr"><label>Tail β₂ <span id="v2">0.5</span></label><input type="range" id="s2" min="-2" max="2" step="0.1" value="0.5"></div>
+      <div class="brow"><button class="bp" onclick="resetEq()">↩ Reset</button></div>
+    </div>
+    <div class="card">
+      <h3>🐭 Add Data Points</h3>
+      <div class="sr"><label>Weight x <span id="px">2.0</span></label><input type="range" id="px_s" min="0" max="5" step="0.5" value="2"></div>
+      <div class="sr"><label>Tail z <span id="pz">2.0</span></label><input type="range" id="pz_s" min="0" max="5" step="0.5" value="2"></div>
+      <div class="sr"><label>Actual body length y <span id="py">3.0</span></label><input type="range" id="py_s" min="0" max="8" step="0.5" value="3"></div>
+      <div class="brow">
+        <button class="ba" onclick="addPt()">+ Add Mouse</button>
+        <button class="br" onclick="clrPts()">Clear</button>
+        <button class="bp" onclick="loadSample()">Sample Data</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📊 R² Live</h3>
+      <div class="srow"><div style="font-size:0.8rem;color:#94a3b8;">R² =</div><div class="sv" id="rv" style="color:#4ade80">—</div></div>
+      <div class="bg"><div class="bf" id="rb" style="width:0%;background:#4ade80"></div></div>
+      <div class="tabs">
+        <div class="tab on" onclick="stab(0,this)">What is R²?</div>
+        <div class="tab" onclick="stab(1,this)">Residuals</div>
+        <div class="tab" onclick="stab(2,this)">Formula</div>
+      </div>
+      <div id="t0" class="ex"><strong>R²</strong> measures how well the regression plane explains body length variation.<br><br>· <strong>R²=1.0</strong> → perfect fit<br>· <strong>R²=0.0</strong> → plane no better than the mean<br>· <strong>R²=0.85</strong> → 85% of variation explained</div>
+      <div id="t1" class="ex" style="display:none">The <strong>red dashed lines</strong> are <strong>residuals</strong> — vertical gap between each actual mouse 🟠 and the plane's prediction 🔵.<br><br>R² asks: are these gaps small relative to overall spread?</div>
+      <div id="t2" class="ex" style="display:none"><span style="color:#fbbf24;font-family:monospace;">R² = 1 − SS_res / SS_tot</span><br><br><strong>SS_res</strong> = Σ(yᵢ−ŷᵢ)² residual error<br><strong>SS_tot</strong> = Σ(yᵢ−ȳ)² total variance<br><br>Load sample data then drag β sliders — watch R² drop!</div>
+      <div style="margin-top:9px;">
+        <div class="lg"><div style="width:14px;height:14px;border-radius:3px;background:rgba(96,165,250,0.4);border:1px solid #60a5fa;flex-shrink:0"></div>Regression plane</div>
+        <div class="lg"><div style="width:12px;height:12px;border-radius:50%;background:#f97316;flex-shrink:0"></div>Actual data (mice)</div>
+        <div class="lg"><div style="width:18px;height:3px;background:#ef4444;border-radius:2px;flex-shrink:0"></div>Residuals</div>
+        <div class="lg"><div style="width:18px;height:3px;background:#a78bfa;border-radius:2px;flex-shrink:0"></div>Mean ȳ plane</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let b0=0.1,b1=0.7,b2=0.5,pts=[],rX=0.38,rY=-0.55,zm=88,drag=false,lx,ly;
+const pred=(x,z)=>b0+b1*x+b2*z;
+function proj(x,y,z){const cx=Math.cos(rY),sx=Math.sin(rY),cy=Math.cos(rX),sy=Math.sin(rX);const rx=cx*x+sx*z,rz=-sx*x+cx*z;const ry2=cy*y-sy*rz,rz2=sy*y+cy*rz;const s=zm/(rz2+8);return{sx:rx*s+cv.width/2,sy:-ry2*s+cv.height/2+25};}
+const W=(x,y,z)=>[x-2.5,y-4,z-2.5];
+function draw(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle='#1e3a5f';ctx.lineWidth=0.7;
+  for(let i=0;i<=5;i++){let a=proj(...W(i,0,0)),b=proj(...W(i,0,5));ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();a=proj(...W(0,0,i));b=proj(...W(5,0,i));ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();}
+  const O=W(0,0,0);
+  [[2.7,0,0,'#f87171','Weight (x)'],[0,2.7,0,'#4ade80','Body Len (y)'],[0,0,2.7,'#60a5fa','Tail (z)']].forEach(([dx,dy,dz,c,l])=>{const p0=proj(...O),p1=proj(O[0]+dx,O[1]+dy,O[2]+dz);ctx.strokeStyle=c;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p0.sx,p0.sy);ctx.lineTo(p1.sx,p1.sy);ctx.stroke();ctx.fillStyle=c;ctx.font='bold 10px Segoe UI';ctx.fillText(l,p1.sx+3,p1.sy+4);});
+  if(pts.length>1){const my=pts.reduce((s,p)=>s+p.y,0)/pts.length;const co=[[0,my,0],[5,my,0],[5,my,5],[0,my,5]].map(([x,y,z])=>proj(...W(x,y,z)));ctx.beginPath();ctx.moveTo(co[0].sx,co[0].sy);co.slice(1).forEach(p=>ctx.lineTo(p.sx,p.sy));ctx.closePath();ctx.fillStyle='rgba(167,139,250,0.07)';ctx.fill();ctx.strokeStyle='rgba(167,139,250,0.4)';ctx.lineWidth=1;ctx.stroke();}
+  const pp=[[0,0],[5,0],[5,5],[0,5]].map(([x,z])=>proj(...W(x,pred(x,z),z)));ctx.beginPath();ctx.moveTo(pp[0].sx,pp[0].sy);pp.slice(1).forEach(p=>ctx.lineTo(p.sx,p.sy));ctx.closePath();ctx.fillStyle='rgba(96,165,250,0.14)';ctx.fill();ctx.strokeStyle='rgba(96,165,250,0.6)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.strokeStyle='rgba(96,165,250,0.18)';ctx.lineWidth=0.6;for(let i=0;i<=5;i++){let a=proj(...W(i,pred(i,0),0)),b=proj(...W(i,pred(i,5),5));ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();a=proj(...W(0,pred(0,i),i));b=proj(...W(5,pred(5,i),i));ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();}
+  pts.forEach(p=>{const yh=pred(p.x,p.z),pa=proj(...W(p.x,p.y,p.z)),pb=proj(...W(p.x,yh,p.z));ctx.strokeStyle='#ef4444';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(pa.sx,pa.sy);ctx.lineTo(pb.sx,pb.sy);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(pa.sx,pa.sy,5,0,Math.PI*2);ctx.fillStyle='#f97316';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();ctx.beginPath();ctx.arc(pb.sx,pb.sy,3,0,Math.PI*2);ctx.fillStyle='#60a5fa';ctx.fill();});
+  stats();
+}
+function stats(){if(pts.length<2){document.getElementById('rv').textContent='—';document.getElementById('rb').style.width='0%';return;}const my=pts.reduce((s,p)=>s+p.y,0)/pts.length;let sr=0,st=0;pts.forEach(p=>{const yh=pred(p.x,p.z);sr+=(p.y-yh)**2;st+=(p.y-my)**2;});const r2=st===0?1:Math.max(0,1-sr/st);document.getElementById('rv').textContent=r2.toFixed(3);const c=r2>.8?'#4ade80':r2>.5?'#fbbf24':'#f87171';document.getElementById('rv').style.color=c;const b=document.getElementById('rb');b.style.width=(r2*100).toFixed(1)+'%';b.style.background=c;}
+document.getElementById('s0').oninput=function(){b0=+this.value;document.getElementById('v0').textContent=b0.toFixed(1);draw();};
+document.getElementById('s1').oninput=function(){b1=+this.value;document.getElementById('v1').textContent=b1.toFixed(1);draw();};
+document.getElementById('s2').oninput=function(){b2=+this.value;document.getElementById('v2').textContent=b2.toFixed(1);draw();};
+document.getElementById('px_s').oninput=function(){document.getElementById('px').textContent=(+this.value).toFixed(1);};
+document.getElementById('pz_s').oninput=function(){document.getElementById('pz').textContent=(+this.value).toFixed(1);};
+document.getElementById('py_s').oninput=function(){document.getElementById('py').textContent=(+this.value).toFixed(1);};
+function addPt(){pts.push({x:+document.getElementById('px_s').value,z:+document.getElementById('pz_s').value,y:+document.getElementById('py_s').value});draw();}
+function clrPts(){pts=[];draw();}
+function resetEq(){b0=0.1;b1=0.7;b2=0.5;document.getElementById('s0').value=0.1;document.getElementById('v0').textContent='0.1';document.getElementById('s1').value=0.7;document.getElementById('v1').textContent='0.7';document.getElementById('s2').value=0.5;document.getElementById('v2').textContent='0.5';draw();}
+function loadSample(){pts=[{x:1,y:1.3,z:1},{x:2,y:2.1,z:1.5},{x:3,y:2.9,z:2},{x:4,y:3.6,z:2.5},{x:1.5,y:1.8,z:2},{x:2.5,y:3.1,z:3},{x:3.5,y:4.0,z:3},{x:4.5,y:4.9,z:3.5},{x:2,y:2.6,z:2.5},{x:3,y:3.5,z:3.5}];draw();}
+function stab(n,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');['t0','t1','t2'].forEach((id,i)=>document.getElementById(id).style.display=i===n?'':'none');}
+cv.onmousedown=e=>{drag=true;lx=e.clientX;ly=e.clientY;};
+window.onmouseup=()=>drag=false;
+window.onmousemove=e=>{if(!drag)return;rY+=(e.clientX-lx)*.01;rX+=(e.clientY-ly)*.01;lx=e.clientX;ly=e.clientY;draw();};
+cv.addEventListener('wheel',e=>{zm=Math.max(40,Math.min(180,zm-e.deltaY*.1));draw();e.preventDefault();},{passive:false});
+draw();
+</script>
+</body>
+</html>
