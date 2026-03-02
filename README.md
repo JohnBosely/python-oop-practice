@@ -1716,7 +1716,7 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 - Choosing the right model because you understand its assumptions
 - Debugging why a model performs badly because you understand what it assumes about data
 
-A junior ML engineer plugs data into models. A good ML engineer understands **why** a certain model fits a certain problem.
+
 
 
 
