@@ -1870,9 +1870,6 @@ Check whether your R² result is statistically significant or could have happene
 
 
 
-*Day 35 of the 11-Month AI Engineer Roadmap*
-*Tomorrow: Gradient descent math + start coding*
-
 
 
 
