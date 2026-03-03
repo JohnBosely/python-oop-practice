@@ -1717,10 +1717,10 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 - Debugging why a model performs badly because you understand what it assumes about data
 
 
+
+
 # Linear Regression — Day 35 Notes
 > What I learned from 3Blue1Brown (Gradient Descent) and StatQuest (Linear Regression, R-squared)
-
-
 
 ## What I Covered Today
 1. [Cost Function](#1-cost-function)
@@ -1873,7 +1873,7 @@ Check whether your R² result is statistically significant or could have happene
 *Day 35 of the 11-Month AI Engineer Roadmap*
 *Tomorrow: Gradient descent math + start coding*
 
-
+LLL
 
 
 
