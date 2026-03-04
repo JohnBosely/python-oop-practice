@@ -1869,7 +1869,7 @@ Check whether your R² result is statistically significant or could have happene
 | P-value of R² | Is this result real or just noise? |
 
 
-
+jjj
 
 
 
