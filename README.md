@@ -1870,7 +1870,7 @@ Check whether your R² result is statistically significant or could have happene
 
 
 linear regression
-gradient 
+
 
 
 
