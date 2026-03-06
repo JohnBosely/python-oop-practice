@@ -1717,7 +1717,9 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 - Debugging why a model performs badly because you understand what it assumes about data
 
 # Linear Regression — Day 35 Notes
-> What I learned from 3Blue1Brown (Gradient Descent) and StatQuest (Linear Regression, R-squared)
+> What I learned from 3Blue1Brown (Gradient Descent) and StatQuest (Linear Regression, R-squared) + afternoon math breakdown session
+
+
 
 ## What I Covered Today
 1. [Cost Function](#1-cost-function)
@@ -1726,6 +1728,9 @@ These concepts teach you to **think probabilistically**. At work the actual skil
 4. [The Line Equation](#4-the-line-equation)
 5. [R-Squared](#5-r-squared)
 6. [The 3-Step Process for Linear Regression](#6-the-3-step-process-for-linear-regression)
+7. [Why We Square the Error](#7-why-we-square-the-error)
+8. [The Gradient Descent Update Rule](#8-the-gradient-descent-update-rule)
+9. [The Full Gradient Descent Loop](#9-the-full-gradient-descent-loop)
 
 
 
@@ -1849,9 +1854,92 @@ Check whether your R² result is statistically significant or could have happene
 
 
 ## What's Still Coming (Tomorrow)
-- StatQuest: Gradient Descent clearly explained
-- The actual math behind gradient descent
 - Coding linear regression from scratch in NumPy
+- Implementing the gradient descent loop in actual code
+- Plotting the loss curve
+
+
+
+## 7. Why We Square the Error
+
+### The problem with raw errors
+If your model makes these errors: +50k, -50k, 0
+
+Adding them gives: 50 + (-50) + 0 = **0** — looks perfect but it's not. Errors cancel out.
+
+### The fix — square everything
+- (+50)² = 2500
+- (-50)² = 2500
+- 0² = 0
+
+Sum = **5000** — now you have an honest picture of how wrong the model is.
+
+### Why squaring works
+- Makes all errors positive
+- Penalizes large errors more than small ones
+- Creates a smooth curve that can be minimized mathematically
+
+
+
+## 8. The Gradient Descent Update Rule
+
+### The formula
+
+new a = old a - learning rate × gradient
+
+
+### What each part means
+| Part | Meaning |
+|||
+| `old a` | where the ball is right now on the hill |
+| `gradient` | the slope — which direction is uphill? |
+| `learning rate` | how big a step to take |
+| `minus` | always move opposite to the slope = downhill |
+
+### Why the minus sign?
+If slope is positive (uphill to the right) → subtract → move left → go downhill ✅
+If slope is negative (downhill to the right) → subtract negative → move right → go downhill ✅
+
+Subtracting the gradient **always** moves you downhill regardless of direction.
+
+### Where does the gradient come from?
+The gradient = `2 * error * x` — this comes from calculus (derivative of the squared error). You don't need to derive it, just know it tells you the slope of the cost function at your current position.
+
+
+
+## 9. The Full Gradient Descent Loop
+
+### The 6 steps
+1. **Make a prediction** → `y = a * x`
+2. **Calculate error** → `prediction - actual`
+3. **Square the errors** → stops negatives cancelling positives
+4. **Calculate gradient** → `2 * error * x`
+5. **Update a** → `new a = old a - learning rate * gradient`
+6. **Repeat** until error stops getting smaller
+
+### In code (tomorrow you'll build this)
+python
+for i in range(1000):           # repeat 1000 times
+    prediction = a * x          # step 1
+    error = prediction - y      # step 2
+    cost = (error ** 2).mean()  # step 3
+    gradient = 2 * error * x    # step 4
+    a = a - 0.1 * gradient      # step 5
+
+
+### Worked example
+One house. Size = 2 (x). Actual price = 4 (y). Start with a = 0.
+
+| Iteration | a | Prediction | Error |
+|--|||-|
+| Start | 0 | 0 | -4 |
+| After 1 | 1.6 | 3.2 | -0.8 |
+| After 2 | 1.92 | 3.84 | -0.16 |
+| Converged | 2.0 | 4.0 | 0 ✅ |
+
+Each loop `a` gets closer to 2 — the value that makes prediction = actual.
+
+
 
 
 
@@ -1864,14 +1952,8 @@ Check whether your R² result is statistically significant or could have happene
 | Least squares | Direct foundation of linear regression |
 | R² | Model evaluation — is this model actually useful? |
 | P-value of R² | Is this result real or just noise? |
-
-
-
-
-
-
-
-
+| Error squaring | Foundation of MSE loss function |
+| Update rule | The core of how all models learn their parameters |
 
 
 
