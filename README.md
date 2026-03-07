@@ -1957,3 +1957,111 @@ Each loop `a` gets closer to 2 — the value that makes prediction = actual.
 
 
 
+
+
+
+
+import matplotlib.pyplot as plt
+
+from sklearn import datasets
+
+from sklearn import svm
+
+#Load the datasets
+
+digits = datasets.load_digits()
+
+clf = svm.SVC(gamma=0.0001, C=100)
+
+print(len(digits.data))
+
+x,y = digits.data[:-1], digits.target[:-1]
+
+clf.fit(x,y)
+
+print("Predictions:",clf.predict(digits.data[-5].reshape(1, -1)))
+
+plt.imshow(digits.images[-5], cmap=plt.cm.gray_r, interpolation="nearest")
+
+plt.show()
+
+# print(digits.data)
+
+# print(digits.target)
+
+# print(digits.images[0])
+
+
+
+
+
+import matplotlib.pyplot as plt
+
+from sklearn import datasets
+
+from sklearn import svm
+
+#Load the datasets
+
+digits = datasets.load_digits()
+
+for gamma in [0.0, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]:
+
+    clf = svm.SVC(gamma=gamma, C=100)
+
+    clf.fit(x, y)
+
+    prediction = clf.predict(digits.data[-1].reshape(1, -1))
+
+    actual = digits.target[-1]
+
+    correct = prediction[0] == actual
+
+    print(f"Gamma: {gamma:<8} Predicted: {prediction[0]}  Actual: {actual}  Correct: {correct}")
+
+
+
+
+
+
+
+
+
+import pandas as pd
+
+import os
+
+import time
+
+from datetime import datetime
+
+path = r"C:\Users\USER\Downloads\intraQuarter\intraQuarter"
+
+def Key_Stats(gather="Total Debt/Equity (mrq)"):
+
+    statspath = path+ '/_KeyStats'
+
+    stock_list = [x[0] for x in os.walk(statspath)]
+
+    #print(stock_list)
+
+    for each_dir in stock_list[1:]:
+
+        each_file = os.listdir(each_dir)
+
+        if len(each_file) > 0:
+
+            for file in each_file:
+
+                date_stamp = datetime.strptime(file, '%Y%m%d%H%M%S')
+
+                unix_time = time.mktime(date_stamp.timetuple())
+
+                print(date_stamp, unix_time)
+
+                time.sleep(15)
+
+    
+
+Key_Stats()
+
