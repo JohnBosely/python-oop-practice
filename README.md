@@ -2063,5 +2063,5 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
 
     
 
-Key_Stats()
+
 
