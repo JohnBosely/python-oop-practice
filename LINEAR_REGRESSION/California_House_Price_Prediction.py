@@ -1,58 +1,64 @@
-import numpy as np 
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
-import plotly.express as px
-import plotly.graph_objects as go
-import plotly.io as pio
-pio.templates
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-from sklearn.datasets import fetch_california_housing
+# 1. Load
 housing = fetch_california_housing()
 X = housing.data
 y = housing.target
 
-dataset = pd.DataFrame(X, columns=housing.feature_names)
-dataset["SalesPrice"] = y #salesprice
-# print(dataset.head())
-# print(dataset.shape)
-# print(dataset.info)
-# print(dataset.describe)
-# print(dataset.isnull().sum())
+# 2. Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# sns.pairplot(dataset.sample(100), height=2.5) This is used to limit the data used to plot
-# sns.pairplot(dataset, height=2.5)
-# plt.tight_layout()
-# sns.histplot(dataset["SalesPrice"])
-# sns.kdeplot(dataset["SalesPrice"])
-# print("Skewness: %f" % dataset['SalesPrice'].skew()) # 0.977763 apparently skewness and kurtosis are used to get ouliers
-# print("Kurtosis: %f" % dataset['SalesPrice'].kurt()) # 0.327870
+# 3. Train 
+model = LinearRegression()
+model.fit(X_train, y_train)
 
-# fig, ax = plt.subplots()
-# ax.scatter(dataset["MedInc"],dataset["SalesPrice"])
-# plt.ylabel('SalesPrice', fontsize=13)
-# plt.xlabel('MedInc', fontsize=13)
-# plt.show()
+# 4. Predict
+predictions = model.predict(X_test)
 
-# dataset.to_excel("CALIFORNIA.xlsx", index=False) This is used to turn a dataset into an excel file
+#5. Measure
+mse = mean_squared_error(y_test, predictions)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, predictions)
+print("Mean Squared Error: ", mse)
+print("RMSE: ", np.sqrt(mse))
+print("R2: ", r2)
 
-from scipy import stats
-from scipy.stats import norm, skew #for some statistics
-
-sns.displot(dataset['SalesPrice'] , fit=norm);
-
-(mu, sigma) = norm.fit(dataset['SalesPrice'])
-print('\n mu = {:.2f} and sigma = {:.2f}\n'.format(mu, sigma))
-
-plt.legend(['Normal dist. ($\mu=$ {:.2f} and $\sigma=$ {:.2f})'.format(mu, sigma)],
-           loc='best')
-plt.ylabel('Frequency')
-plt.xlabel('Sales distribution')
-
-#Get also the QQ-plot
-fig = plt.figure()
-res = stats.probplot(dataset['SalesPrice'], plot=plt)
+plt.figure(figsize=(10,6)) #what does this mean
+plt.scatter(y_test, predictions, alpha=0.3) #what does this mean
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+plt.xlabel("Actual Price")
+plt.ylabel("Predicted Price")
+plt.title("Actual vs Predicted")
 plt.show()
+#also explain those terms means squared, r2 and so on explain why they are useful, i tend to forget often
+
+# This is used to show the actual prices and the predicted prices
+plt.figure(figsize=(10,6))
+plt.scatter(X_test[:, 0], y_test, alpha=0.3, label='Actual')
+plt.scatter(X_test[:, 0], predictions, alpha=0.3, label='Predicted', color='red')
+plt.xlabel("MedInc (feature 0)")
+plt.ylabel("Price")
+plt.legend()
+plt.title("What the model actually learned")
+plt.show()
+
+# This is used find the most important features in the model, however it is not advised to 
+# use it cos it doesnt tel the full story about a dataset
+my_house = np.array([[5.0, 20.0, 6.0, 1.0, 800.0, 3.0, 37.5, -122.0]])
+predicted_price = model.predict(my_house)
+print(f"Predicted price: ${predicted_price[0] * 100000:.2f}")
+
+feature_names = housing.feature_names
+coefficients = model.coef_
+
+for feature, coef in zip(feature_names, coefficients):
+    print(f"{feature}: {coef:.4f}")
+
+
 
