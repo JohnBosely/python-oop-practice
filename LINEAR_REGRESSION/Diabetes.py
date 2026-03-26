@@ -10,13 +10,16 @@ import seaborn as sns
 
 diabetes = load_diabetes()
 
+
 # load Dataset
 X = diabetes.data
 y = diabetes.target
 df = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
 
-# Tells you exactly how many empty cells are in each column
-# print(df.isnull().sum())
+print(df.head()) # First 5 rows
+print(df.columns) # All columns
+print(df.describe) # Describe the dataset
+print(df.isnull().sum()) # Check for empty cells
 
 
 # Split the dataset
@@ -38,8 +41,8 @@ print("MSE: ", mse)
 print("RMSE: ", rmse)
 print("R2: ", r2)
 
-df["target"] = y
 
+df["target"] = y
 correlations = df.corr()["target"].sort_values(ascending=False)
 print(correlations)
 
@@ -62,7 +65,3 @@ prediction2 = model.predict(X_test2)
 print("Original R2:", 0.4526)
 print("New R2:", r2_score(y_test2, prediction2))
 
-
-# print(df.head())
-# print(df.columns)
-# print(df.describe)
