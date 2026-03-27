@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load 
@@ -58,3 +59,21 @@ print(f"Probability of Benign: {probability[0][1]*100:.1f}%")
 # Use actual rows from the dataset to test
 sample_patient = np.array([Cancer.data[0]])   # known malignant
 sample_patient = np.array([Cancer.data[100]]) # try different rows
+
+
+plt.figure(figsize=(8,6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['Malignant', 'Benign'],
+            yticklabels=['Malignant', 'Benign'])
+plt.title('Confusion Matrix')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+plt.show()
+
+#This shows which measurements matter most for detecting cancer.
+feature_importance = pd.Series(model.coef_[0], index=Cancer.feature_names)
+feature_importance.abs().sort_values(ascending=False).head(10).plot(kind='bar')
+plt.title('Top 10 Most Important Features')
+plt.tight_layout()
+plt.show()
+
