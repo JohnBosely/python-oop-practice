@@ -2065,3 +2065,238 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
 
 Key_Stats()
 
+Day 36
+1. What Was Covered Today
+Today covered the full Linear Regression pipeline from scratch — loading data, analysing it, training a model, measuring performance, improving it, and making predictions. Two datasets were completed: California Housing (guided) and Diabetes (solo).
+
+2. The 5-Step ML Pattern
+Every ML project — regardless of algorithm — follows this same pattern:
+
+Step	What It Does
+1. Load	Import dataset and separate features (X) from target (y)
+2. Split	80% training data, 20% test data using train_test_split
+3. Train	model.fit(X_train, y_train) — this is where learning happens
+4. Predict	model.predict(X_test) — model guesses on unseen data
+5. Measure	MSE, RMSE, R2 — how accurate were the predictions?
+
+3. Pre-Training Analysis Checklist
+Before training any model, always check the following:
+
+•Look at the data — dataset.head(), dataset.describe(), dataset.to_excel()
+•Check distributions — sns.histplot() on the target variable
+•Check correlations — sns.heatmap(dataset.corr()) to see feature relationships
+•Check missing values — dataset.isnull().sum()
+•Check outliers — dataset.boxplot()
+•Engineer new features — combine features that make more sense together
+•Check scales — dataset.describe() to compare feature ranges
+
+Note: Steps 1, 4 (missing values) and the train/test split apply to EVERY model. The others matter most for linear models.
+
+4. Understanding the Metrics
+
+MSE — Mean Squared Error
+Takes each prediction error, squares it, then averages all of them. Squaring punishes large errors heavily. The unit is squared (e.g. squared dollars) which is hard to interpret directly.
+
+RMSE — Root Mean Squared Error
+Square root of MSE — brings the unit back to something readable. An RMSE of 0.74 on California housing means the model is off by $74,000 on average. This is the number you report to humans.
+
+R2 — R Squared Score
+Answers: how much of the variation in the target does the model explain?
+•R2 = 0.0  — model is useless, same as guessing the average
+•R2 = 0.5  — model explains 50% of why prices vary
+•R2 = 1.0  — perfect prediction
+•R2 = 0.6+ is decent, 0.8+ is good, 0.9+ is very good
+
+5. California Housing Dataset
+
+Features
+•MedInc — median income of the area
+•HouseAge — median age of houses
+•AveRooms — average rooms per house
+•AveBedrms — average bedrooms per house
+•Population — total people in the area
+•AveOccup — average people per household
+•Latitude / Longitude — location coordinates
+
+Results
+Metric	Value
+MSE	0.5559
+RMSE	0.7456 (~$74,500 average error)
+R2	0.5758 (model explains 57% of price variation)
+
+Key Discoveries
+•Positive longitude caused a prediction of -$10 million — model has no common sense outside training range (extrapolation)
+•Population coefficient was ~0.0000 — nearly useless feature
+•AveRooms and AveBedrms make more sense combined as RoomsPerBedroom (feature engineering)
+•Latitude and Longitude look weak by coefficient but actually have large impact due to their value range
+•The price cap at $500k creates a spike in the distribution — artificial ceiling in the data
+
+Complete Code
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+import matplotlib.pyplot as plt
+
+housing = fetch_california_housing()
+X, y = housing.data, housing.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LinearRegression()
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+print('RMSE:', np.sqrt(mean_squared_error(y_test, predictions)))
+print('R2:', r2_score(y_test, predictions))
+
+6. Diabetes Dataset (Solo Practice)
+
+Features
+•age — patient age
+•sex — biological sex
+•bmi — body mass index
+•bp — average blood pressure
+•s1 — total cholesterol
+•s2 — LDL (bad cholesterol)
+•s3 — HDL (good cholesterol)
+•s4 — total cholesterol / HDL ratio
+•s5 — log of serum triglycerides
+•s6 — blood sugar level
+
+Results
+Metric	Value
+MSE	2900.19
+RMSE	53.85 (~54 units of disease progression error)
+R2	0.4526 (model explains 45% of diabetes progression)
+
+Heatmap Analysis
+•bmi = 0.59 — strongest predictor, overweight people have worse diabetes
+•s5 = 0.57 — high triglycerides linked to diabetes progression
+•bp = 0.44 — high blood pressure linked to diabetes
+•s3 = -0.39 — negative: high good cholesterol REDUCES diabetes
+•sex = 0.04 — nearly zero, weakest predictor
+•s1 and s2 correlate at 0.90 with each other — multicollinearity (same information twice)
+
+Key Discovery
+Dropping weak features (sex, s2) caused R2 to DROP — proving that even weak-looking features can contribute when combined with others. Correlation alone does not tell the full story. Always test before removing features.
+
+7. Important Concepts Learned
+
+Linear Regression
+Finds the best straight line through data using the equation: price = (w1 x MedInc) + (w2 x HouseAge) + ... + bias. The model.fit() call solves this mathematically in one shot — no iteration, no hyperparameters to tune.
+
+Overfitting vs Underfitting
+Discovered through SVM gamma experiments earlier in learning. Low gamma = too simple (underfitting). High gamma = memorises training data (overfitting). Sweet spot = generalises to new data.
+
+Feature Engineering
+Creating new, more meaningful features from existing ones. Example: RoomsPerBedroom = AveRooms / AveBedrms tells more than either column alone.
+
+Multicollinearity
+When two features contain nearly identical information (s1 and s2 at 0.90 correlation). Confuses linear regression — ideally keep one and drop the other, but always test first.
+
+Extrapolation
+Linear regression extends its line infinitely in both directions. Feeding it values outside its training range (like positive longitude for California) produces absurd predictions like -$10 million. Models have no common sense.
+
+Coefficients
+model.coef_ shows how much each feature influences the prediction. BUT coefficient size depends on feature scale — a small coefficient on a large-range feature can still have big real-world impact. Always consider the range, not just the coefficient.
+
+8. When Linear Regression Is and Isn't Appropriate
+
+Good Use Cases	                  Bad Use Cases
+House price prediction            Cancer detection
+Salary vs experience              Image recognition
+Quick baseline model              Spam detection
+Simple linear relationships       Complex curved patterns	
+                          
+
+9. Next Steps
+
+•Push California Housing and Diabetes projects to GitHub
+•Continue FreeCodeCamp course at 1:07:06 — Logistic Regression
+•Apply Logistic Regression to a solo dataset after learning it
+•Continue Phase 1: Decision Trees then Random Forest
+
+Phase 1 Roadmap Progress
+Topic	Status
+Linear Regression	Complete
+SVM (digits classifier)	Complete
+Logistic Regression	Next
+Decision Trees	Upcoming
+Random Forest	Upcoming
+
+## Decision Trees
+
+### What It Is
+An algorithm that learns a series of yes/no questions to classify 
+or predict. Like a flowchart built automatically from data.
+
+Two Types
+- DecisionTreeClassifier  →  predicts categories
+- DecisionTreeRegressor   →  predicts numbers
+
+### Key Hyperparameters
+- max_depth    →  limits how many questions the tree can ask
+                  prevents overfitting
+                  None = unlimited = always overfits
+
+- ccp_alpha    →  post-pruning strength
+                  0.0 = no pruning
+                  higher = simpler tree
+                  sweet spot = train drops, test stays same
+
+### How To Read The Tree
+- gini = 0.0       →  perfect node, all same class
+- gini = 0.659     →  very mixed, needs splitting
+- value = [3,49,0] →  how many samples of each class at this node
+- samples = 52     →  total samples that reached this node
+
+### Overfitting Pattern
+Depth: 2    Train: 0.44  Test: 0.30  ← underfitting
+Depth: 5    Train: 0.67  Test: 0.33  ← sweet spot
+Depth: None Train: 1.00  Test: 0.06  ← completely overfit
+
+### Results
+Wine Classification:
+  Best depth = 3
+  Test accuracy = 94.4%
+  Tree beats logistic regression on this dataset
+
+Diabetes Regression:
+  Best depth = 5
+  Test R2 = 0.334
+  Linear regression (0.45) beats decision tree here
+  Shows trees are not always the best tool
+
+### When To Use Decision Trees
+Good for:
+  - When you need to explain every decision
+  - Legal, medical, financial decisions
+  - Clean datasets with clear boundaries
+  - Quick baseline model
+
+Bad for:
+  - Complex continuous relationships (use linear regression)
+  - High accuracy requirements (use Random Forest)
+  - Large datasets (trees get too complex)
+
+### Key Insight
+Decision trees are rarely used alone in production.
+They are the foundation of Random Forest and XGBoost
+which are among the most widely used algorithms in industry.
+A single tree = one opinion that overfits
+Random Forest = 100 trees voting = much more reliable
+
+### Visualising The Tree
+from sklearn.tree import plot_tree
+plt.figure(figsize=(40,15))
+plot_tree(model, feature_names=..., class_names=..., filled=True)
+plt.show()
+
+### Comparing Algorithms On Same Dataset
+models = {
+    "Decision Tree": DecisionTreeClassifier(max_depth=3),
+    "Logistic Regression": LogisticRegression(),
+}
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    print(name, model.score(X_test, y_test))
+
