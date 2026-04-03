@@ -2223,6 +2223,9 @@ Logistic Regression	Next
 Decision Trees	Upcoming
 Random Forest	Upcoming
 
+
+
+Day 37 - 40
 ## Decision Trees
 
 ### What It Is
@@ -2300,3 +2303,102 @@ for name, model in models.items():
     model.fit(X_train, y_train)
     print(name, model.score(X_test, y_test))
 
+## Random Forest
+
+### What It Is
+An ensemble of many decision trees that vote together.
+Fixes the main problem with decision trees — overfitting.
+Each tree sees a random subset of data and random subset
+of features. Final prediction = majority vote of all trees.
+
+### Why It Works Better Than One Tree
+One tree   →  memorises training data, fails on new data
+100 trees  →  individual mistakes cancel out, generalises well
+Analogy    →  asking 100 people for directions vs asking one person
+
+### Two Types
+RandomForestClassifier  →  predicts categories (survived/died)
+RandomForestRegressor   →  predicts numbers (house price, diabetes)
+
+### Key Hyperparameters
+n_estimators  →  number of trees
+               10  = unstable, not enough voters
+               100 = sweet spot, stable results ✅
+               500 = marginal improvement, much slower
+
+max_depth     →  depth of each tree
+               None = trees grow fully, can overfit
+               3-10 = usually best range
+               always test multiple values
+
+### Results
+
+Titanic (Classification):
+  n_estimators=200, max_depth=10
+  Accuracy = 82.7%
+  Age and Sex were most important features
+  Model independently discovered "women and children first"
+  without being told anything about Titanic history
+
+Diabetes (Regression):
+  n_estimators=100, max_depth=3
+  R2 = 0.4691
+  Beat linear regression (0.4526) with tuned max_depth
+  Default Random Forest actually lost to linear regression
+  Shows hyperparameter tuning matters
+
+Wine (Classification):
+  n_estimators=50+
+  Accuracy = 100%
+  Simple clean dataset, 50 trees was enough
+  Adding more trees had no effect
+
+### Titanic Accuracy Ceiling
+82-84% is honest and correct for this dataset
+95%+ claims online = almost always overfitting
+Survival had a random element that no model can predict
+
+### Feature Importance
+model.feature_importances_  →  how much each feature contributed
+Plot with:
+  importance = pd.Series(model.feature_importances_, index=X.columns)
+  importance.sort_values().plot(kind='barh')
+
+### Clean Code Structure
+def load_and_clean():     →  one job: return clean dataframe
+def evaluate(model):      →  one job: print all metrics
+def plot_importance():    →  one job: show feature chart
+def main():               →  orchestrate everything
+
+### When To Use Random Forest
+Good for:
+  Tabular data (rows and columns)
+  When decision tree is overfitting
+  When you need feature importance
+  When you want good results with minimal tuning
+  Classification and regression problems
+
+Not ideal for:
+  Image data (use CNN)
+  Text data (use transformers)
+  When you need to explain every single decision
+  Very large datasets (can be slow)
+
+### Random Forest vs Decision Tree vs Linear Regression
+Problem           Best Model
+──────────────────────────────────────────
+Linear data       Linear Regression
+Clear boundaries  Decision Tree
+Complex tabular   Random Forest  (most common choice)
+Images            CNN
+Text              Transformers
+
+### Comparison Code
+models = {
+    "Decision Tree": DecisionTreeClassifier(max_depth=3),
+    "Random Forest": RandomForestClassifier(n_estimators=100),
+    "Logistic Regression": LogisticRegression(),
+}
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    print(name, model.score(X_test, y_test))
