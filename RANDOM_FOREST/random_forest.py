@@ -43,6 +43,3 @@ importance = pd.Series(rf_best.feature_importances_, index=diabetes.feature_name
 importance.sort_values().plot(kind='barh')
 plt.title("Feature Importance - Random Forest")
 plt.show()
-
-
-
