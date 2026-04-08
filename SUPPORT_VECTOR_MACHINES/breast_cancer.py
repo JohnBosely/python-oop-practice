@@ -58,12 +58,6 @@ def evaluate(best_model, X_test, y_test):
     print("CONFUSION MATRIX:\n", confusion_matrix(y_test, predictions))
     print("CLASSIFICATION REPORT:\n", classification_report(y_test, predictions))
 
-def plot_importance(best_model, columns):
-    importance = pd.Series(best_model.feature_importances_, index=columns)
-    importance.sort_values().plot(kind='barh')
-    plt.title("Feature Importance")
-    plt.show()
-
 def main():
     # Load
     X, y = load_and_clean()
