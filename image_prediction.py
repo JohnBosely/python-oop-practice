@@ -16,3 +16,4 @@ print("Actual:", digits.target[-8])
 
 plt.imshow(digits.images[-1], cmap=plt.cm.gray_r, interpolation="nearest")
 plt.show()
+

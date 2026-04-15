@@ -107,8 +107,8 @@ class Database(ABC):
         #run sql query
         pass
 
-    def get_status(self): #why is a connected attribute not here, when you said based on the _connected attribute
-        if self._connected: #this part makes no sense cos if self._connected is false, why is it true here
+    def get_status(self): 
+        if self._connected: 
             return 'Connected'
         else:
             return 'Disconected'
