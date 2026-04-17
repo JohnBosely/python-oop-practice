@@ -30,7 +30,7 @@ def remove_constant_features (df):
     return df[df.columns[selector.get_support()]]
 
 # <----- REMOVE HIGHLY CORRELATED COLUMNS -----> #
-def remove_high_correlation(df, treshold=0.95):
+def remove_high_correlation(df, threshold=0.95):
     corr_matrix = df.corr().abs()
     upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
     to_drop = [column for column in upper.columns if any(upper[column] > treshold)]
@@ -120,5 +120,3 @@ if y_test_actual is None:
     
     submission.to_csv("my_submission.csv", index=False)
     print("Success! Your predictions are saved in 'my_submission.csv'")
-
-
