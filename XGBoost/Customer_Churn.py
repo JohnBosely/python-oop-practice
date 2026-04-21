@@ -1,0 +1,86 @@
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from xgboost import XGBClassifier
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+def load_and_explore():
+    url = "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv"
+    df = pd.read_csv(url)
+    df = df.drop(columns=['customerID'])
+        # 1. Force conversion (This creates the 'True' Nulls)
+    df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
+    # 2. Now check for nulls - you'll see 11!
+    print(f"Nulls after conversion: {df['TotalCharges'].isnull().sum()}")
+    # 3. Fill them
+    df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].median())
+# This should be around (7043, 31), not 6000+!
+    df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
+    df['gender'] = df['gender'].map({'Male': 1, 'Female': 0})
+    df['Partner'] = df['Partner'].map({'Yes': 1, 'No': 0})
+    df['Dependents'] = df['Dependents'].map({'Yes': 1, 'No': 0})
+    df['PhoneService'] = df['PhoneService'].map({'Yes': 1, 'No': 0})
+    df['Monthly_Tenure_Ratio'] = df['MonthlyCharges'] / (df['tenure'] + 1) # +1 to avoid div by zero
+    df['High_Risk_Combo'] = ((df['InternetService'] == 'Fiber optic') & 
+                             (df['Contract'] == 'Month-to-month')).astype(int)
+    addons = ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+    # Convert 'Yes' to 1 and 'No' to 0, then sum
+    df['Total_Addons'] = df[addons].apply(lambda x: x == 'Yes').sum(axis=1)
+    df_final = pd.get_dummies(df, drop_first=True)
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+    print(f"Final shape: {df_final.shape}") 
+    print(df['Churn'].value_counts(normalize=True))
+    X = df_final.drop('Churn', axis=1)
+    y = df_final['Churn']
+    sns.countplot(x='Churn', data=df)
+    plt.title('Distribution of Churn')
+    plt.show()
+    return df_final
+
+
+def evaluate(model,X_test, y_test):
+    predictions = model.predict(X_test)
+    print(classification_report(y_test, predictions))
+    print(confusion_matrix(y_test, predictions))
+
+def plot_importance(model, columns):
+    importance = pd.Series(model.feature_importances_, index=columns)
+    importance.sort_values().plot(kind='barh')
+    plt.title("Feature Importance")
+    plt.show()
+
+def main():
+    # Load
+    df = load_and_explore()
+    X = df.drop("Churn", axis=1)
+    y = df["Churn"]
+
+    # Split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y)
+
+    # Tune
+    for n, lr, depth, spw in [(100, 0.1, 3, 1), (100, 0.05, 3, 4), (100, 0.05, 3, 2.77), (100, 0.1, 3, 4), (100, 0.05, 3, 2.77) ]:
+        rf = XGBClassifier(n_estimators=n, max_depth=depth, random_state=42, learning_rate=lr, scale_pos_weight=spw)
+        rf.fit(X_train, y_train)
+        print(f"Trees: {n} Depth: {depth} Accuracy: {rf.score(X_test, y_test):.4f}")
+
+    #Train best model
+    model = XGBClassifier(n_estimators=1000, max_depth=3, random_state=42, learning_rate=0.05, scale_pos_weight=2.77, eval_metric='logloss', early_stopping_rounds=10)
+    model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+
+    # Evaluate
+    evaluate(model, X_test, y_test)
+
+    # # Visualise
+    plot_importance(model, X.columns)
+
+main()
+
+
+
