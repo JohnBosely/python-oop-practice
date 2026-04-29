@@ -36,6 +36,15 @@ def load_and_explore():
     sns.countplot(x='Churn', data=df)
     plt.title('Distribution of Churn')
     plt.show()
+        # Assuming your target column is named 'Churn'
+    counts = df_final['Churn'].value_counts()
+
+    # Index 0 is usually 'Stayed', Index 1 is 'Churned'
+    # Formula: Negative Count / Positive Count
+    scale_pos_weight = counts[0] / counts[1]
+
+    print(f"Recommended scale_pos_weight: {scale_pos_weight:.2f}")
+
     return df_final
 
 
